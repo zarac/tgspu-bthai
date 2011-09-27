@@ -17,8 +17,6 @@ TerranBuildPlanner::~TerranBuildPlanner() {
 
 void TerranBuildPlanner::init() {
 	buildOrder.push_back(UnitTypes::Terran_Barracks);
-	buildOrder.push_back(UnitTypes::Terran_Barracks);
-	buildOrder.push_back(UnitTypes::Terran_Barracks);
 	buildOrder.push_back(UnitTypes::Terran_Refinery);
 	buildOrder.push_back(UnitTypes::Terran_Bunker);
 	
