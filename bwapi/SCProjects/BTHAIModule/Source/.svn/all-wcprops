@@ -1,0 +1,917 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/128/trunk/SCProjects/BTHAIModule/Source
+END
+ProtossCommander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/ProtossCommander.cpp
+END
+DropshipAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/DropshipAgent.cpp
+END
+DragoonAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/DragoonAgent.cpp
+END
+BunkerAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/96/trunk/SCProjects/BTHAIModule/Source/BunkerAgent.h
+END
+Dll.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/Dll.cpp
+END
+ArbiterTribunalAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ArbiterTribunalAgent.h
+END
+CitadelOfAdunAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CitadelOfAdunAgent.cpp
+END
+Squad.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/Squad.h
+END
+BuildPlanner.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/108/trunk/SCProjects/BTHAIModule/Source/BuildPlanner.h
+END
+TerranSquadCommander.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/103/trunk/SCProjects/BTHAIModule/Source/TerranSquadCommander.h
+END
+AgentFactory.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/70/trunk/SCProjects/BTHAIModule/Source/AgentFactory.cpp
+END
+TerranCommander.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/120/trunk/SCProjects/BTHAIModule/Source/TerranCommander.h
+END
+DarkTemplarAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/DarkTemplarAgent.h
+END
+FactoryAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/FactoryAgent.h
+END
+RoboticsSupportBayAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/RoboticsSupportBayAgent.cpp
+END
+UnitAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/UnitAgent.cpp
+END
+BTHAIModule.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/110/trunk/SCProjects/BTHAIModule/Source/BTHAIModule.h
+END
+ValkyrieAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/ValkyrieAgent.cpp
+END
+ObserverAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ObserverAgent.cpp
+END
+ReaverAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ReaverAgent.h
+END
+CovertOpsAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CovertOpsAgent.h
+END
+GhostAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/GhostAgent.h
+END
+TerranSquadCommander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/110/trunk/SCProjects/BTHAIModule/Source/TerranSquadCommander.cpp
+END
+BuildPlanner.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/108/trunk/SCProjects/BTHAIModule/Source/BuildPlanner.cpp
+END
+ScienceFacilityAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ScienceFacilityAgent.h
+END
+WraithAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/WraithAgent.h
+END
+ArmoryAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ArmoryAgent.cpp
+END
+RoboticsFacilityAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/119/trunk/SCProjects/BTHAIModule/Source/RoboticsFacilityAgent.cpp
+END
+StargateAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/119/trunk/SCProjects/BTHAIModule/Source/StargateAgent.cpp
+END
+BaseAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/101/trunk/SCProjects/BTHAIModule/Source/BaseAgent.cpp
+END
+MarineAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/MarineAgent.cpp
+END
+AgentFactory.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/AgentFactory.h
+END
+ProtossSquadCommander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/91/trunk/SCProjects/BTHAIModule/Source/ProtossSquadCommander.cpp
+END
+ObservatoryAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ObservatoryAgent.cpp
+END
+SiegeTankAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/SiegeTankAgent.h
+END
+CyberneticsCoreAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CyberneticsCoreAgent.cpp
+END
+RefineryAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/94/trunk/SCProjects/BTHAIModule/Source/RefineryAgent.cpp
+END
+GhostAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/GhostAgent.cpp
+END
+CovertOpsAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CovertOpsAgent.cpp
+END
+UnitAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/UnitAgent.h
+END
+ReaverAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ReaverAgent.cpp
+END
+MedicAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/MedicAgent.h
+END
+PFManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/106/trunk/SCProjects/BTHAIModule/Source/PFManager.h
+END
+CarrierAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/CarrierAgent.cpp
+END
+SquadCommander.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/110/trunk/SCProjects/BTHAIModule/Source/SquadCommander.h
+END
+EngineeringBayAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/EngineeringBayAgent.h
+END
+ScienceVesselAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/92/trunk/SCProjects/BTHAIModule/Source/ScienceVesselAgent.cpp
+END
+ObserverAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ObserverAgent.h
+END
+CoverMap.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/CoverMap.cpp
+END
+ZealotAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ZealotAgent.cpp
+END
+ControlTowerAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ControlTowerAgent.cpp
+END
+ForgeAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ForgeAgent.cpp
+END
+CorsairAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/CorsairAgent.cpp
+END
+PhysicsLabAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/PhysicsLabAgent.h
+END
+GatewayAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/GatewayAgent.h
+END
+FleetBeaconAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/FleetBeaconAgent.cpp
+END
+NexusAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/NexusAgent.h
+END
+BattlecruiserAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/BattlecruiserAgent.h
+END
+WorkerAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/80/trunk/SCProjects/BTHAIModule/Source/WorkerAgent.h
+END
+MarineAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/77/trunk/SCProjects/BTHAIModule/Source/MarineAgent.h
+END
+SquadCommander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/SquadCommander.cpp
+END
+ObservatoryAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ObservatoryAgent.h
+END
+Commander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/Commander.cpp
+END
+ComsatAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/89/trunk/SCProjects/BTHAIModule/Source/ComsatAgent.cpp
+END
+CyberneticsCoreAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CyberneticsCoreAgent.h
+END
+RefineryAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/79/trunk/SCProjects/BTHAIModule/Source/RefineryAgent.h
+END
+ArbiterTribunalAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ArbiterTribunalAgent.cpp
+END
+CarrierAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/73/trunk/SCProjects/BTHAIModule/Source/CarrierAgent.h
+END
+BarracksAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/BarracksAgent.h
+END
+TemplarArchivesAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/TemplarArchivesAgent.h
+END
+ScienceVesselAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/87/trunk/SCProjects/BTHAIModule/Source/ScienceVesselAgent.h
+END
+ScoutAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ScoutAgent.h
+END
+StructureAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/94/trunk/SCProjects/BTHAIModule/Source/StructureAgent.h
+END
+VultureAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/VultureAgent.cpp
+END
+CitadelOfAdunAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CitadelOfAdunAgent.h
+END
+BattlecruiserAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/BattlecruiserAgent.cpp
+END
+AgentManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/120/trunk/SCProjects/BTHAIModule/Source/AgentManager.cpp
+END
+FleetBeaconAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/FleetBeaconAgent.h
+END
+StarportAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/118/trunk/SCProjects/BTHAIModule/Source/StarportAgent.cpp
+END
+ExplorationManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/ExplorationManager.h
+END
+GoliathAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/GoliathAgent.cpp
+END
+BarracksAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/118/trunk/SCProjects/BTHAIModule/Source/BarracksAgent.cpp
+END
+SpottedObject.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/SpottedObject.cpp
+END
+ProtossBuildPlanner.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/105/trunk/SCProjects/BTHAIModule/Source/ProtossBuildPlanner.cpp
+END
+ValkyrieAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/68/trunk/SCProjects/BTHAIModule/Source/ValkyrieAgent.h
+END
+MachineShopAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/MachineShopAgent.cpp
+END
+StructureAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/94/trunk/SCProjects/BTHAIModule/Source/StructureAgent.cpp
+END
+BWTAExtern.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/BWTAExtern.h
+END
+Statistics.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/118/trunk/SCProjects/BTHAIModule/Source/Statistics.cpp
+END
+StargateAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/StargateAgent.h
+END
+BaseAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/!svn/ver/96/trunk/SCProjects/BTHAIModule/Source/BaseAgent.h
+END
+PFFunctions.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/89/trunk/SCProjects/BTHAIModule/Source/PFFunctions.cpp
+END
+CommandCenterAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/91/trunk/SCProjects/BTHAIModule/Source/CommandCenterAgent.cpp
+END
+ExplorationManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/ExplorationManager.cpp
+END
+MedicAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/109/trunk/SCProjects/BTHAIModule/Source/MedicAgent.cpp
+END
+PFManager.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/128/trunk/SCProjects/BTHAIModule/Source/PFManager.cpp
+END
+ProtossSquadCommander.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/71/trunk/SCProjects/BTHAIModule/Source/ProtossSquadCommander.h
+END
+BunkerAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/96/trunk/SCProjects/BTHAIModule/Source/BunkerAgent.cpp
+END
+AssimilatorAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/94/trunk/SCProjects/BTHAIModule/Source/AssimilatorAgent.cpp
+END
+GoliathAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/68/trunk/SCProjects/BTHAIModule/Source/GoliathAgent.h
+END
+ShuttleAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/74/trunk/SCProjects/BTHAIModule/Source/ShuttleAgent.h
+END
+DragoonAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/DragoonAgent.h
+END
+Squad.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/Squad.cpp
+END
+PhysicsLabAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/PhysicsLabAgent.cpp
+END
+GatewayAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/119/trunk/SCProjects/BTHAIModule/Source/GatewayAgent.cpp
+END
+TerranCommander.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/TerranCommander.cpp
+END
+AcademyAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/79/trunk/SCProjects/BTHAIModule/Source/AcademyAgent.cpp
+END
+ShieldBatteryAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ShieldBatteryAgent.cpp
+END
+ZealotAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ZealotAgent.h
+END
+DarkTemplarAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/DarkTemplarAgent.cpp
+END
+CorsairAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/CorsairAgent.h
+END
+ForgeAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ForgeAgent.h
+END
+WorkerAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/WorkerAgent.cpp
+END
+HighTemplarAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/HighTemplarAgent.h
+END
+BTHAIModule.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/BTHAIModule.cpp
+END
+Statistics.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/110/trunk/SCProjects/BTHAIModule/Source/Statistics.h
+END
+RoboticsSupportBayAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/RoboticsSupportBayAgent.h
+END
+CommandCenterAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/77/trunk/SCProjects/BTHAIModule/Source/CommandCenterAgent.h
+END
+PFFunctions.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/PFFunctions.h
+END
+ShuttleAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ShuttleAgent.cpp
+END
+TemplarArchivesAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svn/!svn/ver/119/trunk/SCProjects/BTHAIModule/Source/TemplarArchivesAgent.cpp
+END
+ComsatAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/89/trunk/SCProjects/BTHAIModule/Source/ComsatAgent.h
+END
+Commander.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/Commander.h
+END
+AssimilatorAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/79/trunk/SCProjects/BTHAIModule/Source/AssimilatorAgent.h
+END
+ArbiterAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/72/trunk/SCProjects/BTHAIModule/Source/ArbiterAgent.h
+END
+ScoutAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ScoutAgent.cpp
+END
+WraithAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/88/trunk/SCProjects/BTHAIModule/Source/WraithAgent.cpp
+END
+ScienceFacilityAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ScienceFacilityAgent.cpp
+END
+HighTemplarAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/127/trunk/SCProjects/BTHAIModule/Source/HighTemplarAgent.cpp
+END
+ShieldBatteryAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ShieldBatteryAgent.h
+END
+AcademyAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/AcademyAgent.h
+END
+SiegeTankAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/SiegeTankAgent.cpp
+END
+VultureAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/VultureAgent.h
+END
+ArmoryAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ArmoryAgent.h
+END
+RoboticsFacilityAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/RoboticsFacilityAgent.h
+END
+AgentManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/120/trunk/SCProjects/BTHAIModule/Source/AgentManager.h
+END
+TerranBuildPlanner.h
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/75/trunk/SCProjects/BTHAIModule/Source/TerranBuildPlanner.h
+END
+FirebatAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/77/trunk/SCProjects/BTHAIModule/Source/FirebatAgent.h
+END
+StarportAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/StarportAgent.h
+END
+ProtossCommander.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/119/trunk/SCProjects/BTHAIModule/Source/ProtossCommander.h
+END
+EngineeringBayAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/EngineeringBayAgent.cpp
+END
+ArbiterAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/90/trunk/SCProjects/BTHAIModule/Source/ArbiterAgent.cpp
+END
+DropshipAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/69/trunk/SCProjects/BTHAIModule/Source/DropshipAgent.h
+END
+SpottedObject.h
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/126/trunk/SCProjects/BTHAIModule/Source/SpottedObject.h
+END
+ProtossBuildPlanner.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/75/trunk/SCProjects/BTHAIModule/Source/ProtossBuildPlanner.h
+END
+NexusAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/92/trunk/SCProjects/BTHAIModule/Source/NexusAgent.cpp
+END
+CoverMap.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/87/trunk/SCProjects/BTHAIModule/Source/CoverMap.h
+END
+MachineShopAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/MachineShopAgent.h
+END
+ControlTowerAgent.h
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/52/trunk/SCProjects/BTHAIModule/Source/ControlTowerAgent.h
+END
+FactoryAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/118/trunk/SCProjects/BTHAIModule/Source/FactoryAgent.cpp
+END
+TerranBuildPlanner.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/!svn/ver/94/trunk/SCProjects/BTHAIModule/Source/TerranBuildPlanner.cpp
+END
+FirebatAgent.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svn/!svn/ver/78/trunk/SCProjects/BTHAIModule/Source/FirebatAgent.cpp
+END

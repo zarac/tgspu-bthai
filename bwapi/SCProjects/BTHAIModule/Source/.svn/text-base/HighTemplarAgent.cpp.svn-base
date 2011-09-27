@@ -1,0 +1,144 @@
+#include "HighTemplarAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+HighTemplarAgent::HighTemplarAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("HighTemplarAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+	hasCastTransform = false;
+}
+
+void HighTemplarAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	bool defensive = false;
+
+	if (isOfType(unit->getType(), UnitTypes::Protoss_Archon)) {
+		//High Templar has been transformed to an Archon.
+		int eCnt = enemyAttackingUnitsWithinRange();
+		int fCnt = friendlyUnitsWithinRange();
+		if (eCnt >= fCnt * 2) {
+			defensive = true;
+		}
+	}
+	else {
+		//High Templar unit, use spells
+		defensive = true;
+		
+		TechType psiStorm = TechTypes::Psionic_Storm;
+		if (Broodwar->self()->hasResearched(psiStorm)) {
+			if (unit->getEnergy() >= 75) {
+				Unit* target = findPsiStormTarget();
+				if (target != NULL) {
+					Broodwar->printf("[%d] Psionic Storm used on %s", unitID, target->getType().getName().c_str());
+					unit->useTech(psiStorm, target->getPosition());
+					return;
+				}
+			}
+		}
+
+		/*TechType hallucination = TechTypes::Hallucination;
+		if (Broodwar->self()->hasResearched(hallucination)) {
+			if (unit->getEnergy() >= 100) {
+				int eCnt = enemyUnitsWithinRange(psiStorm.getWeapon().maxRange());
+				if (eCnt >= 4) {
+					BaseAgent* target = findHallucinationTarget();
+					if (target != NULL) {
+						Broodwar->printf("[%d] Uses Hallucination on %s", unitID, target->getUnit()->getType().getName().c_str());
+						unit->useTech(hallucination, target->getUnit());
+						return;
+					}
+				}
+			}
+		}*/
+
+
+		//Out of Energy, see if we can transform to an Archon
+		if (unit->getEnergy() <= 50 && enemyUnitsWithinRange(320) > 0) {
+			if (!hasCastTransform) {
+				BaseAgent* target = findArchonTarget();
+				if (target != NULL) {
+					unit->useTech(TechTypes::Archon_Warp, target->getUnit());
+					hasCastTransform = true;
+					Broodwar->printf("[%d] %s uses Summon Archon on %s", unitID, unit->getType().getName().c_str(), target->getUnit()->getType().getName().c_str());
+					return;
+				}
+			}
+		}
+	}
+
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+}
+
+Unit* HighTemplarAgent::findPsiStormTarget() {
+	int maxRange = 6*32;//TechTypes::Psionic_Storm.getWeapon().maxRange();
+
+	Unit* target = NULL;
+	int bestScore = 150;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {		
+		if ((*i)->exists() && (*i)->getType().canAttack()) {
+			double dist = unit->getDistance((*i)->getPosition());
+			if (dist <= maxRange) {
+				int cScore = (*i)->getType().destroyScore();
+				if (bestScore < 0 || cScore > bestScore) {
+					if (friendlyUnitsWithinRange((*i)->getTilePosition(), 64) == 0 && !(*i)->isUnderStorm()) {
+					//if (!(*i)->isUnderStorm()) {
+						bestScore = cScore;
+						target = (*i);
+					}
+				}
+			}
+		}
+	}
+
+	return target;
+}
+
+BaseAgent* HighTemplarAgent::findHallucinationTarget() {
+	int maxRange = TechTypes::Hallucination.getWeapon().maxRange();
+
+	AgentManager* agentManager = AgentManager::getInstance();
+	for (int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isAlive() && agent->isUnit()) {
+			if (!agent->isOfType(UnitTypes::Protoss_Dark_Templar) || !agent->isOfType(UnitTypes::Protoss_High_Templar)) {
+				if (!agent->getUnit()->isHallucination()) {
+					AgentManager::release(agent);
+					return agent;
+				}
+			}
+		}
+		AgentManager::release(agent);
+	}
+
+	return NULL;
+}
+
+BaseAgent* HighTemplarAgent::findArchonTarget() {
+	int maxRange = 12 * 32;
+
+	AgentManager* agentManager = AgentManager::getInstance();
+	for (int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (!agent->matches(unit) && agent->isAlive() && agent->isOfType(UnitTypes::Protoss_High_Templar) && agent->getUnit()->getEnergy() <= 50) {
+			AgentManager::release(agent);
+			return agent;
+		}
+		AgentManager::release(agent);
+	}
+
+	return NULL;
+}
+
+string HighTemplarAgent::getTypeName() {
+	return "HighTemplarAgent";
+}

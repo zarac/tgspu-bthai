@@ -1,0 +1,35 @@
+#include "ObserverAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+ObserverAgent::ObserverAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("ObserverAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void ObserverAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	if (currentState != EXPLORE) {
+		PFManager::getInstance()->computeAttackingUnitActions(this, goal, false);
+	}
+	else {
+		if (goal.x() >= 0) {
+			unit->rightClick(Position(goal));
+		}
+	}
+	
+	//TODO: Add unitspecific code here
+}
+
+string ObserverAgent::getTypeName() {
+	return "ObserverAgent";
+}

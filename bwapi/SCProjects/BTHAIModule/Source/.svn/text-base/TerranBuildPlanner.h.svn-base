@@ -1,0 +1,52 @@
+#ifndef __TERRANBUILDPLANNER_H__
+#define __TERRANBUILDPLANNER_H__
+
+#include "BuildPlanner.h"
+
+using namespace BWAPI;
+using namespace std;
+
+/** This is the Terran implementation of the BuildPlanner class. See BuildPlanner for more details.
+ *
+ * Terran bot tactics:
+ * - The Terran strategy involves using Bunkers with Marines as defense, and attack with a large force
+ * containing around 20 Marines, one Medic per five Marines, some Vultures, and at least 2 Siege Tanks
+ * with Siege ability researched. Siege tanks with Siege ability is the core of how the bot attacks.
+ * Later in the game an air attack force containing a Science Vessel, some Wraiths and Battlecruisers
+ * are used. Ghosts are not implemented (yet).
+ * If perfect information is disabled, scouting is early in the game performed by Marines or Vultures.
+ * Later in the game Wraiths takes over the scouting tasks.
+ *
+ * Weaknesses:
+ * - When engaging the enemy, the attack force tends to be spread out with fast units in the front that
+ * does not wait for the heavy but slow tanks to arrive before engaging enemy defense structures.
+ *
+ * Author: Johan Hagelback (johan.hagelback@gmail.com)
+ */
+class TerranBuildPlanner : public BuildPlanner {
+
+private:
+	bool shallBuildSupplyDepot();
+	int level;
+
+public:
+	TerranBuildPlanner();
+	~TerranBuildPlanner();
+
+	/** Initial setup of the build order. */
+	void init();
+
+	/** Called each update to issue orders. */
+	void computeActions();
+
+	/** Notifies that an own building has been destroyed. */
+	void buildingDestroyed(Unit* building);
+
+	/** See BuildPlanner for info. */
+	void unlock(UnitType type);
+
+	/** Used to print some info to the screen. */
+	void printInfo();
+};
+
+#endif

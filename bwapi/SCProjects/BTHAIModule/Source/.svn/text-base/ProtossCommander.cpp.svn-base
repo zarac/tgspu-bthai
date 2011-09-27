@@ -1,0 +1,112 @@
+#include "ProtossCommander.h"
+#include "AgentManager.h"
+
+ProtossCommander::ProtossCommander() {
+	currentID = 1;	
+	currentState = DEFEND;
+
+	addMainAttackSquad();
+	addMainAttackSquad();
+	addDarkTemplarSquad();
+	addDetectorSquad();
+	addMainAirSquad();
+}
+
+ProtossCommander::~ProtossCommander() {
+	for (int i = 0; i < (int)squads.size(); i++) {
+		delete squads.at(i);
+	}
+	delete instance;
+}
+
+void ProtossCommander::addMainAttackSquad() {
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "MainAttackSquad");
+	squad->addSetup(UnitTypes::Protoss_Zealot, 8);
+	squad->addSetup(UnitTypes::Protoss_Dragoon, 2);
+	squad->addSetup(UnitTypes::Protoss_High_Templar, 2);
+	squads.push_back(squad);
+	currentID++;
+}
+
+void ProtossCommander::addDarkTemplarSquad() {
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "DarkTemplarSquad");
+	squad->addSetup(UnitTypes::Protoss_Dark_Templar, 8);
+	squads.push_back(squad);
+	currentID++;
+}
+
+void ProtossCommander::addMainAirSquad() {
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "MainAirSquad");
+	squad->addSetup(UnitTypes::Protoss_Scout, 5);
+	squads.push_back(squad);
+	currentID++;
+}
+
+void ProtossCommander::addDetectorSquad() {
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "DetectorSquad");
+	squad->addSetup(UnitTypes::Protoss_Observer, 1);
+	squads.push_back(squad);
+	currentID++;
+}
+
+void ProtossCommander::computeActions() {
+	if (currentState == DEFEND) {
+		int noOffSquads = 0;
+
+		for (int i = 0; i < (int)squads.size(); i++) {
+			if (squads.at(i)->isFull() && squads.at(i)->isOffensive()) {
+				noOffSquads++;
+			}
+		}
+
+		//Time to attack
+		if (noOffSquads >= 2) {
+			currentState = ATTACK;
+		}
+	}
+
+	if (currentState == DEFEND) {
+		BWTA::Chokepoint* choke = BaseAgent::getClosestChokePoint();
+		if (choke != NULL) {
+			for (int i = 0; i < (int)squads.size(); i++) {
+				TilePosition defSpot = TilePosition(choke->getCenter());
+				squads.at(i)->setGoal(defSpot);
+			}
+		}
+	}
+
+	if (currentState == ATTACK) {
+		for (int i = 0; i < (int)squads.size(); i++) {
+			if (squads.at(i)->isActive() && squads.at(i)->isOffensive()) {
+				TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
+				if (closest.x() >= 0) {
+					squads.at(i)->setGoal(closest);
+				}
+			}
+			else {
+				BWTA::Chokepoint* choke = BaseAgent::getClosestChokePoint();
+				if (choke != NULL) {
+					TilePosition defSpot = TilePosition(choke->getCenter());
+					squads.at(i)->setGoal(defSpot);
+				}
+			}
+		}
+	}
+
+	//Check if we need workers to attack. Happen if an enemy try to kill off workers before
+	//we have attacking units to defend.
+	if (currentState == DEFEND && AgentManager::getInstance()->countNoUnits(UnitTypes::Protoss_Zealot) == 0) {
+		
+		BaseAgent* base = AgentManager::getInstance()->getAgent(UnitTypes::Protoss_Nexus);
+		if (base != NULL) {
+			if (checkWorkersAttack(base)) {
+				return;
+			}
+		}
+	}
+
+	//Check if there are obstacles we can remove.
+	if (Broodwar->getFrameCount() % 150 == 0) {
+		checkRemovableObstacles();
+	}
+}

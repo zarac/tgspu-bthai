@@ -1,0 +1,60 @@
+#include "ReaverAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+ReaverAgent::ReaverAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("ReaverAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+	goalSet = false;
+}
+
+void ReaverAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	if (!goalSet) {
+		if (analyzed) {
+			int chokepointNo = BuildPlanner::getInstance()->getChokepointNo();
+			BWTA::Chokepoint* choke = BaseAgent::getChokePoint(chokepointNo);
+			if (choke != NULL) {
+				goal = TilePosition(choke->getCenter());
+				goalSet = true;
+			}
+		}
+	}
+
+	bool defensive = false;
+
+	int eCnt = enemyAttackingUnitsWithinRange();
+	int fCnt = friendlyUnitsWithinRange();
+	if (eCnt >= fCnt * 2) {
+		defensive = true;
+	}
+	if (eCnt >= 4) {
+		if (!unit->isConstructing()) {
+			unit->train(UnitTypes::Protoss_Scarab);
+			return;
+		}
+	}
+
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+}
+
+void ReaverAgent::setGoal(TilePosition goal) {
+	//Do nothing
+}
+
+void ReaverAgent::clearGoal() {
+	//Do nothing
+}
+
+string ReaverAgent::getTypeName() {
+	return "ReaverAgent";
+}

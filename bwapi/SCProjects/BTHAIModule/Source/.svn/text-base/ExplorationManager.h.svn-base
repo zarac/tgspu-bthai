@@ -1,0 +1,102 @@
+#ifndef __EXPLORATIONMANAGER_H__
+#define __EXPLORATIONMANAGER_H__
+
+#include "UnitAgent.h"
+#include "SpottedObject.h"
+#include "Squad.h"
+
+using namespace BWAPI;
+using namespace std;
+
+/** The ExplorationManager handles all tasks involving exploration of the game world. It issue orders to a number of units
+ * that is used as explorers, keep track of areas recently explored, and keep track of spotted resources or enemy buildings.
+ *
+ * The ExplorationManager is implemented as a singleton class. Each class that needs to access ExplorationManager can request an instance,
+ * and all classes shares the same ExplorationManager instance.
+ *
+ * Author: Johan Hagelback (johan.hagelback@gmail.com)
+ */
+class ExplorationManager {
+
+private:
+	vector<SpottedObject*> spottedBuildings;
+	vector<SpottedObject*> spottedResources;
+
+	ExplorationManager();
+	static ExplorationManager* instance;
+	static bool instanceFlag;
+	int lastUpdateFrame;
+	
+	void handleSquad(Squad* squad);
+	void handleAgent(BaseAgent* agent);
+
+	void updateSeen();
+	void updateExploreMap();
+	void checkObject(SpottedObject* obj);
+	TilePosition getNextToExplore(TilePosition start, BaseAgent* agent);
+	bool isWalkable(TilePosition start, TilePosition pos);
+	
+	int w;
+	int h;
+	int** explore_map;
+
+	bool active;
+
+public:
+	~ExplorationManager();
+
+	/** Returns the instance of the class. */
+	static ExplorationManager* getInstance();
+
+	/** Sets ExplorationManager to inactive. Is used when perfect information is activated. */
+	void setInactive();
+
+	/** Returns true if the ExplorationManager is active, false if not. */
+	bool isActive();
+
+	/** Called each update to issue orders. */
+	void computeActions();
+
+	/** Shows all spotted objects as squares on the SC map. Use for debug purpose. */
+	void debug();
+
+	/** Notifies about an enemy unit that has been spotted. */
+	void addSpottedUnit(Unit* unit);
+
+	/** Adds a spotted start position for the enemy. */
+	void addSpottedStartLocation(TilePosition pos);
+
+	/** Notifies about a resource (minerals or vespene gas) that has been spotted. */
+	void addSpottedResource(Unit* unit);
+
+	/** Notifies that an enemy unit has been destroyed. If the destroyed unit was among
+	 * the spotted units, it is removed from the list. */
+	void unitDestroyed(Unit* unit);
+
+	/** Returns the list of spotted enemy buildings. */
+	vector<SpottedObject*> getSpottedUnits();
+
+	/** Returns, if found, where the closest non-used vespene geyser has been spotted. */
+	SpottedObject* findSpottedGeyser();
+
+	/** Returns a mineral object in the second mineral patch on the map. */
+	SpottedObject* findSpottedMineralPatch();
+
+	/** Returns true if a ground unit can reach position b from position a.
+	 * Uses BWTA. */
+	static bool canReach(TilePosition a, TilePosition b);
+
+	/** Returns true if an enemy is Protoss. */
+	static bool enemyIsProtoss();
+
+	/** Returns true if an enemy is Zerg. */
+	static bool enemyIsZerg();
+
+	/** Returns true if an enemy is Terran. */
+	static bool enemyIsTerran();
+
+	/** All enemy races are currently unknown. */
+	static bool enemyIsUnknown();
+};
+
+#endif

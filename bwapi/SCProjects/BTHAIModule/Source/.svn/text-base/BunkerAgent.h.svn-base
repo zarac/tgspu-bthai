@@ -1,0 +1,50 @@
+#ifndef __BUNKERAGENT_H__
+#define __BUNKERAGENT_H__
+
+#include <BWAPI.h>
+#include "StructureAgent.h"
+using namespace BWAPI;
+using namespace std;
+
+/** The BunkerAgent handles Terran Bunker buildings.
+ *
+ * Implemented abilities:
+ * - Keeps track of the units inside the bunker.
+ * - Which units to use in the Bunker depends on the enemy race(s).
+ *
+ * Author: Johan Hagelback (johan.hagelback@gmail.com)
+ */
+class BunkerAgent : public StructureAgent {
+
+private:
+	int noMarines;
+	int noFirebats;
+	void checkStimTrick(BaseAgent* agent);
+	void removeFromSquads(BaseAgent* agent);
+
+public:
+	vector<BaseAgent*> loadedUnits;
+
+	BunkerAgent(Unit* mUnit);
+	~BunkerAgent();
+
+	/** Called each update to issue orders. */
+	void computeActions();
+
+	/** Returns the unique type name for structure agents. */
+	string getTypeName();
+
+	/** Returns true if the specified agent shall enter this Bunker. */
+	bool shallEnterBunker(BaseAgent* agent);
+
+	/** Loads the specified agent into the Bunker. */
+	//void loadUnit(BaseAgent* agent);
+
+	/** Used to print info about this agent to the screen. */
+	void printInfo();
+
+	static int AgentRemovedEvent(void* BaseAgentRemoved, void* ObjectToStore);
+	
+};
+
+#endif

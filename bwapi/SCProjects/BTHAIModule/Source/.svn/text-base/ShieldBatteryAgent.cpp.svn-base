@@ -1,0 +1,19 @@
+#include "ShieldBatteryAgent.h"
+#include "AgentManager.h"
+
+ShieldBatteryAgent::ShieldBatteryAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	Broodwar->printf("ShieldBatteryAgent created (%s)", unit->getType().getName().c_str());
+}
+
+void ShieldBatteryAgent::computeActions() {
+	
+}
+
+string ShieldBatteryAgent::getTypeName() {
+	return "ShieldBatteryAgent";
+}
+
+
+

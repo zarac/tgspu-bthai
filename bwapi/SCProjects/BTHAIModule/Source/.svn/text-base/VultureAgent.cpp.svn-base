@@ -1,0 +1,54 @@
+#include "VultureAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+VultureAgent::VultureAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("VultureAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+	mineDropFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void VultureAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	if (currentState != EXPLORE) {
+		//Vultures are very fast. Stay away if there are
+		//too many enemies around.
+		bool defensive = false;
+		int eCnt = enemyAttackingUnitsWithinRange();
+		int fCnt = friendlyUnitsWithinRange();
+		if ( (eCnt > fCnt) || (eCnt > 0 && unit->getHitPoints() <= 50) ) {
+			if (Broodwar->self()->hasResearched(TechTypes::Spider_Mines)) {
+				int framesSinceDrop = Broodwar->getFrameCount() - mineDropFrame;
+				if (unit->getSpiderMineCount() > 0 && framesSinceDrop >= 100) {
+					//Broodwar->printf("[%d] dropped spider mine", unitID);
+					unit->useTech(TechTypes::Spider_Mines, unit->getPosition());
+					mineDropFrame = Broodwar->getFrameCount();
+					return;
+				}
+			}
+			//Broodwar->printf("[%d] Vulture is defensive", unitID);
+			defensive = true;
+		}
+
+		PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+	}
+	else {
+		if (goal.x() >= 0) {
+			unit->rightClick(Position(goal));
+		}
+	}
+}
+
+string VultureAgent::getTypeName() {
+	return "VultureAgent";
+}
+

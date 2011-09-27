@@ -1,0 +1,622 @@
+#include "UnitAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+#include "ExplorationManager.h"
+#include "SpottedObject.h"
+
+UnitAgent::UnitAgent() {
+	currentState = DEFEND;
+}
+
+UnitAgent::UnitAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("UnitAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+	currentState = DEFEND;
+
+	goal = TilePosition(-1, -1);
+}
+
+void UnitAgent::computeActions() {
+#if DISABLE_UNIT_AI == 0
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame; 
+
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, false);
+#endif
+}
+
+int UnitAgent::enemyUnitsWithinRange(int maxRange) {
+	int eCnt = 0;
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		//Enemy seen
+		double dist = unit->getDistance((*i));
+		if (dist <= maxRange) {
+			eCnt++;
+		}
+		
+	}
+
+	if (ExplorationManager::getInstance()->isActive()) {
+		//Check ExplorationManager
+		vector<SpottedObject*> objects = ExplorationManager::getInstance()->getSpottedUnits();
+		for (int i = 0; i < (int)objects.size(); i++) {
+			SpottedObject* obj = objects.at(i);
+			if (obj->isActive()) {
+				double dist = unit->getDistance(obj->getPosition());
+				if (dist <= maxRange) {
+					eCnt++;
+				}
+			}
+		}
+	}
+
+	return eCnt;
+}
+
+vector<Unit*> UnitAgent::enemyUnitsWithinRangeList(int maxRange) {
+	vector<Unit*> units;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		double dist = unit->getDistance((*i));
+		if (dist <= maxRange) {
+			units.push_back((*i));
+		}
+	}
+
+	return units;
+}
+
+int UnitAgent::enemyGroundUnitsWithinRange(int maxRange) {
+	if (maxRange < 0) {
+		return 0;
+	}
+
+	int eCnt = 0;
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		//Enemy seen
+		if (!((*i)->getType().isFlyer() || (*i)->getType().isFlyingBuilding())) {
+			double dist = unit->getDistance((*i));
+			if (dist <= maxRange) {
+				eCnt++;
+			}
+		}
+		
+	}
+
+	//Check ExplorationManager
+	if (ExplorationManager::getInstance()->isActive()) {
+		vector<SpottedObject*> objects = ExplorationManager::getInstance()->getSpottedUnits();
+		for (int i = 0; i < (int)objects.size(); i++) {
+			SpottedObject* obj = objects.at(i);
+			if (obj->isActive()) {
+				if (!(obj->getType().isFlyer() || obj->getType().isFlyingBuilding())) {
+					double dist = unit->getDistance(obj->getPosition());
+					if (dist <= maxRange) {
+						eCnt++;
+					}
+				}
+			}
+		}
+	}
+
+	return eCnt;
+}
+
+int UnitAgent::enemyGroundAttackingUnitsWithinRange(TilePosition center, int maxRange) {
+	if (maxRange < 0) {
+		return 0;
+	}
+
+	int eCnt = 0;
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		//Enemy seen
+		if (!((*i)->getType().isFlyer() || (*i)->getType().isFlyingBuilding())) {
+			if (canAttack((*i)->getType(), unit->getType())) {
+				double dist = (*i)->getDistance(Position(center));
+				if (dist <= maxRange) {
+					eCnt++;
+				}
+			}
+		}
+		
+	}
+
+	//Check ExplorationManager
+	if (ExplorationManager::getInstance()->isActive()) {
+		vector<SpottedObject*> objects = ExplorationManager::getInstance()->getSpottedUnits();
+		for (int i = 0; i < (int)objects.size(); i++) {
+			SpottedObject* obj = objects.at(i);
+			if (obj->isActive()) {
+				if (!(obj->getType().isFlyer() || obj->getType().isFlyingBuilding())) {
+					if (canAttack(obj->getType(), unit->getType())) {
+						double dist = obj->getPosition().getDistance(Position(center));
+						if (dist <= maxRange) {
+							eCnt++;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return eCnt;
+}
+
+int UnitAgent::enemyAirUnitsWithinRange(int maxRange) {
+	if (maxRange < 0) {
+		return 0;
+	}
+
+	int eCnt = 0;
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		//Enemy seen
+		if ((*i)->getType().isFlyer() || (*i)->getType().isFlyingBuilding()) {
+			double dist = unit->getDistance((*i));
+			if (dist <= maxRange) {
+				eCnt++;
+			}
+		}
+		
+	}
+
+	//Check ExplorationManager
+	if (ExplorationManager::getInstance()->isActive()) {
+		vector<SpottedObject*> objects = ExplorationManager::getInstance()->getSpottedUnits();
+		for (int i = 0; i < (int)objects.size(); i++) {
+			SpottedObject* obj = objects.at(i);
+			if (obj->isActive()) {
+				if (obj->getType().isFlyer() || obj->getType().isFlyingBuilding()) {
+					double dist = unit->getDistance(obj->getPosition());
+					if (dist <= maxRange) {
+						eCnt++;
+					}
+				}
+			}
+		}
+	}
+
+	return eCnt;
+}
+
+int UnitAgent::enemyAirAttackingUnitsWithinRange(TilePosition center, int maxRange) {
+	if (maxRange < 0) {
+		return 0;
+	}
+
+	int eCnt = 0;
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		//Enemy seen
+		if ((*i)->getType().isFlyer() || (*i)->getType().isFlyingBuilding()) {
+			if (canAttack((*i)->getType(), unit->getType())) {
+				double dist = (*i)->getDistance(Position(center));
+				if (dist <= maxRange) {
+					eCnt++;
+				}
+			}
+		}
+		
+	}
+
+	//Check ExplorationManager
+	if (ExplorationManager::getInstance()->isActive()) {
+		vector<SpottedObject*> objects = ExplorationManager::getInstance()->getSpottedUnits();
+		for (int i = 0; i < (int)objects.size(); i++) {
+			SpottedObject* obj = objects.at(i);
+			if (obj->isActive()) {
+				if (obj->getType().isFlyer() || obj->getType().isFlyingBuilding()) {
+					if (canAttack(obj->getType(), unit->getType())) {
+						double dist = obj->getPosition().getDistance(Position(center));
+						if (dist <= maxRange) {
+							eCnt++;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return eCnt;
+}
+
+bool UnitAgent::isWithinRange(UnitType enemyUnitType, int maxRange) {
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		if ((*i)->getType().getID() == enemyUnitType.getID()) {
+			double dist = unit->getDistance((*i));
+			if (dist <= maxRange) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+int UnitAgent::enemyAttackingUnitsWithinRange() {
+	return enemyGroundAttackingUnitsWithinRange(unit->getTilePosition(), getGroundRange()) + enemyAirAttackingUnitsWithinRange(unit->getTilePosition(), getAirRange());
+}
+
+int UnitAgent::enemyAttackingUnitsWithinRange(int maxRange, TilePosition center) {
+	return enemyGroundAttackingUnitsWithinRange(center, maxRange) + enemyAirAttackingUnitsWithinRange(center, maxRange);
+}
+
+int UnitAgent::enemyAttackingUnitsWithinRange(UnitType type) {
+	return enemyGroundAttackingUnitsWithinRange(unit->getTilePosition(), getGroundRange(type)) + enemyAirAttackingUnitsWithinRange(unit->getTilePosition(), getAirRange(type));
+}
+
+Unit* UnitAgent::getClosestOrganicEnemy(int maxRange) {
+	Unit* enemy = NULL;
+	double bestDist = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		if ((*i)->getType().isOrganic() && !(*i)->getType().isBuilding()) {
+			double cDist = unit->getDistance((*i));
+			if (bestDist < 0 || cDist < bestDist) {
+				bestDist = cDist;
+				enemy = (*i);
+			}
+		}
+	}
+
+	return enemy;
+}
+
+Unit* UnitAgent::getClosestAttackingEnemy(int maxRange) {
+	Unit* enemy = NULL;
+	double bestDist = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		if (canAttack((*i)->getType(), unit->getType())) {
+			double cDist = unit->getDistance((*i));
+			if (bestDist < 0 || cDist < bestDist) {
+				bestDist = cDist;
+				enemy = (*i);
+			}
+		}
+	}
+
+	return enemy;
+}
+
+Unit* UnitAgent::getClosestShieldedEnemy(int maxRange) {
+	Unit* enemy = NULL;
+	double bestDist = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		if ((*i)->getShields() > 0) {
+			double cDist = unit->getDistance((*i));
+			if (bestDist < 0 || cDist < bestDist) {
+				bestDist = cDist;
+				enemy = (*i);
+			}
+		}
+	}
+
+	return enemy;
+}
+
+Unit* UnitAgent::getClosestEnemyTurret(int maxRange) {
+	Unit* enemy = NULL;
+	double bestDist = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		UnitType type = (*i)->getType();
+		if (type.isBuilding() && type.canAttack()) {
+			double cDist = unit->getDistance((*i));
+			if (bestDist < 0 || cDist < bestDist) {
+				bestDist = cDist;
+				enemy = (*i);
+			}
+		}
+	}
+
+	return enemy;
+}
+
+Unit* UnitAgent::getClosestEnemyAirDefense(int maxRange) {
+	Unit* enemy = NULL;
+	double bestDist = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		UnitType type = (*i)->getType();
+		
+		bool canAttackAir = false;
+		if (type.isBuilding() || type.isMechanical()) {
+			if (type.canAttack()) {
+				if (type.groundWeapon().targetsAir()) canAttackAir = true;
+				if (type.airWeapon().targetsAir()) canAttackAir = true;
+			}
+		}
+
+		if (canAttackAir) {
+			double cDist = unit->getDistance((*i));
+			if (bestDist < 0 || cDist < bestDist) {
+				bestDist = cDist;
+				enemy = (*i);
+			}
+		}
+	}
+
+	return enemy;
+}
+
+int UnitAgent::friendlyUnitsOfTypeWithinRange(UnitType type, int maxRange) {
+	int fCnt = 0;
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isOfType(type) && agent->isAlive()) {
+			double dist = unit->getDistance(agent->getUnit());
+			if (dist <= maxRange) {
+				fCnt++;
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return fCnt;
+}
+
+int UnitAgent::noUnitsAttacking(Unit* target) {
+	int fCnt = 0;
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isAlive()) {
+			Unit* cUnit = agent->getUnit();
+			Unit* cTarget = cUnit->getTarget();
+			if (cTarget != NULL) {
+				if (cTarget->getID() == target->getID()) {
+					fCnt++;
+				}
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return fCnt;
+}
+
+int UnitAgent::noMeleeUnitsAttacking(Unit* target) {
+	int fCnt = 0;
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isAlive() && (agent->isOfType(UnitTypes::Protoss_Zealot) || agent->isOfType(UnitTypes::Protoss_Dark_Templar))) {
+			Unit* cUnit = agent->getUnit();
+			Unit* cTarget = cUnit->getTarget();
+			if (cTarget != NULL) {
+				if (cTarget->getID() == target->getID()) {
+					fCnt++;
+				}
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return fCnt;
+}
+
+int UnitAgent::friendlyUnitsWithinRange() {
+	return friendlyUnitsWithinRange(192);
+}
+
+int UnitAgent::friendlyUnitsWithinRange(int maxRange) {
+	int fCnt = 0;
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isUnit() && agent->getTypeName() != "MedicAgent") {
+			double dist = unit->getDistance(agent->getUnit());
+			if (dist <= maxRange) {
+				fCnt++;
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return fCnt;
+}
+
+int UnitAgent::friendlyUnitsWithinRange(TilePosition tilePos, int maxRange) {
+	int fCnt = 0;
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isUnit() && agent->getTypeName() != "MedicAgent") {
+			double dist = agent->getUnit()->getDistance(Position(tilePos));
+			if (dist <= maxRange) {
+				fCnt++;
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return fCnt;
+}
+
+vector<BaseAgent*> UnitAgent::friendlyUnitsWithinRangeList(int maxRange) {
+	vector<BaseAgent*> units;
+
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isUnit() && agent->getTypeName() != "MedicAgent") {
+			double dist = unit->getDistance(agent->getUnit());
+			if (dist <= maxRange) {
+				units.push_back(agent);
+			}
+		}
+		AgentManager::release(agent);
+	}
+	return units;
+}
+
+vector<BaseAgent*> UnitAgent::getBunkers() {
+	vector<BaseAgent*> units;
+
+	AgentManager* agentManager = AgentManager::getInstance();
+	for(int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isOfType(UnitTypes::Terran_Bunker)) {
+			units.push_back(agent);
+		}
+		AgentManager::release(agent);
+	}
+	return units;
+}
+
+int UnitAgent::getGroundRange() {
+	return getGroundRange(unit->getType());
+}
+
+int UnitAgent::getGroundRange(UnitType type) {
+	WeaponType wep1 = type.groundWeapon();
+	WeaponType wep2 = type.airWeapon();
+
+	int maxRange = -1;
+	if (wep1.targetsGround()) {
+		maxRange = wep1.maxRange();
+	}
+	if (wep2.targetsGround()) {
+		if (wep2.maxRange() > maxRange) {
+			maxRange = wep2.maxRange();
+		}
+	}
+	
+	return maxRange;
+}
+
+int UnitAgent::getAirRange() {
+	return getAirRange(unit->getType());
+}
+
+int UnitAgent::getAirRange(UnitType type) {
+	WeaponType wep1 = type.groundWeapon();
+	WeaponType wep2 = type.airWeapon();
+
+	int maxRange = -1;
+	if (wep1.targetsAir()) {
+		maxRange = wep1.maxRange();
+	}
+	if (wep2.targetsAir()) {
+		if (wep2.maxRange() > maxRange) {
+			maxRange = wep2.maxRange();
+		}
+	}
+	
+	return maxRange;
+}
+
+bool UnitAgent::canAttack(UnitType attacker, UnitType target) {
+	if (!attacker.canAttack()) {
+		return false;
+	}
+
+	if (target.isFlyer() || target.isFlyingBuilding()) {
+		if (getAirRange(attacker) >= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		if (getGroundRange(attacker) >= 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+}
+
+string UnitAgent::getTypeName() {
+	return "UnitAgent";
+}
+
+void UnitAgent::setGoal(TilePosition goal) {
+	if (unit->getType().isFlyer() || unit->getType().isFlyingBuilding()) {
+		//Flyers, can always move to goals.
+		this->goal = goal;
+	}
+	else {
+		//Ground units, check if we can reach goal.
+		if (ExplorationManager::canReach(unit->getTilePosition(), goal)) {
+			this->goal = goal;
+		}
+	}
+}
+
+void UnitAgent::clearGoal() {
+	goal = TilePosition(-1, -1);
+}
+
+TilePosition UnitAgent::getGoal() {
+	return goal;
+}
+
+void UnitAgent::assignToExplore() {
+	Broodwar->printf("[%d] %s assigned to explore", unitID, unit->getType().getName().c_str());
+	currentState = EXPLORE;
+}
+
+void UnitAgent::assignToAttack() {
+	if (currentState != EXPLORE && currentState != BUNKERED) {
+		currentState = ATTACK;
+	}
+}
+
+void UnitAgent::assignToDefend() {
+	if (currentState != EXPLORE && currentState != BUNKERED) {
+		currentState = DEFEND;
+	}
+}
+
+bool UnitAgent::isExploring() {
+	if (currentState == EXPLORE) {
+		return true;
+	}
+	return false;
+}
+
+bool UnitAgent::isAttacking() {
+	if (currentState == ATTACK) {
+		return true;
+	}
+	return false;
+}
+
+bool UnitAgent::isDefending() {
+	if (currentState == DEFEND) {
+		return true;
+	}
+	return false;
+}
+
+bool UnitAgent::isBunkered() {
+	if (currentState == BUNKERED) {
+		return true;
+	}
+	return false;
+}
+
+void UnitAgent::printInfo() {
+	string state = "";
+
+	if (isAttacking()) {
+		state = "Attacking";
+	}
+	else if (isDefending()) {
+		state = "Defending";
+	}
+	else if (isExploring()) {
+		state = "Exploring";
+	}
+	else if (isBunkered()) {
+		state = "Bunkered";
+	}
+	
+	Broodwar->printf("[%d] %s, SquadID: %d Goal: (%d,%d)  %s", unitID, state.c_str(), squadID, goal.x(), goal.y(), info.c_str());
+}
+

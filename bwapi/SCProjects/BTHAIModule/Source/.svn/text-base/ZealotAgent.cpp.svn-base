@@ -1,0 +1,82 @@
+#include "ZealotAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+ZealotAgent::ZealotAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("ZealotAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void ZealotAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	if (currentState != EXPLORE) {
+		bool defensive = false;
+
+		int eCnt = enemyAttackingUnitsWithinRange();
+		int fCnt = friendlyUnitsWithinRange();
+		if (eCnt >= fCnt * 2) {
+			defensive = true;
+		}
+
+		PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+
+		Unit* target = findTarget();
+		if (target != NULL) {
+			//Broodwar->printf("[%d] Change target", unitID);
+			unit->attackUnit(target);
+		}
+	}
+	else {
+		if (goal.x() >= 0) {
+			unit->rightClick(Position(goal));
+		}
+	}
+}
+
+Unit* ZealotAgent::findTarget() {
+	if (unit->getTarget() == NULL) {
+		return NULL;
+	}
+	int noMyTarget = noMeleeUnitsAttacking(unit->getTarget());
+	if (noMyTarget > 1 && noMyTarget <= 4) {
+		//Already have a good target
+		return NULL;
+	}
+
+	int maxRange = 13*32;
+	Unit* target = NULL;
+	int bestScore = -1;
+
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {		
+		if ((*i)->exists()) {
+			if (canAttack(unit->getType(), (*i)->getType())) {
+				double dist = unit->getDistance((*i)->getPosition());
+				if (dist <= maxRange) {
+					int no = noMeleeUnitsAttacking((*i));
+					if (no <= 4) {
+						int cScore = (*i)->getType().destroyScore();
+						if (bestScore < 0 || cScore > bestScore) {
+							bestScore = cScore;
+							target = (*i);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return target;
+}
+
+string ZealotAgent::getTypeName() {
+	return "ZealotAgent";
+}

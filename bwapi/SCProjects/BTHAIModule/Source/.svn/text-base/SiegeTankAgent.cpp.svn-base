@@ -1,0 +1,55 @@
+#include "SiegeTankAgent.h"
+#include "PFManager.h"
+#include "ExplorationManager.h"
+#include "SpottedObject.h"
+
+SiegeTankAgent::SiegeTankAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("SiegeTankAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void SiegeTankAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame; 
+
+	if (Broodwar->self()->hasResearched(TechTypes::Tank_Siege_Mode)) {
+		int eCnt = enemyGroundUnitsWithinRange(getGroundRange(UnitTypes::Terran_Siege_Tank_Siege_Mode));
+		if (eCnt > 0 && !unit->isSieged()) {
+			unit->siege();
+			return;
+		}
+		if (eCnt == 0 && unit->isSieged()) {
+			unit->unsiege();
+			return;
+		}
+		if (eCnt > 0 && unit->isSieged()) {
+			int maxRange = getGroundRange(UnitTypes::Terran_Siege_Tank_Siege_Mode);
+			int ec = 0;
+			for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+				//Enemy seen
+				if (!((*i)->getType().isFlyer() || (*i)->getType().isFlyingBuilding())) {
+					double dist = unit->getDistance((*i));
+					if (dist <= maxRange) {
+						ec++;
+					}
+				}
+			}
+		}
+	}
+
+	//The tank cant move if sieged
+	if (!unit->isSieged()) {
+		PFManager::getInstance()->computeAttackingUnitActions(this, goal, false);
+	}
+}
+
+string SiegeTankAgent::getTypeName() {
+	return "SiegeTankAgent";
+}

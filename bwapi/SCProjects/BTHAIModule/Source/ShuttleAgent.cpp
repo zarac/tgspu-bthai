@@ -1,0 +1,30 @@
+#include "ShuttleAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+ShuttleAgent::ShuttleAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("ShuttleAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void ShuttleAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	bool defensive = true;
+	
+	//TODO: Add unitspecific code here
+	
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+}
+
+string ShuttleAgent::getTypeName() {
+	return "ShuttleAgent";
+}

@@ -1,0 +1,339 @@
+#include "CoverMap.h"
+#include "AgentManager.h"
+#include "ExplorationManager.h"
+#include "BaseAgent.h"
+#include "BuildPlanner.h"
+
+bool CoverMap::instanceFlag = false;
+CoverMap* CoverMap::instance = NULL;
+
+CoverMap::CoverMap() {
+	w = Broodwar->mapWidth();
+	h = Broodwar->mapHeight();
+	range = 40;
+
+	Unit* worker = findWorker();
+
+	cover_map = new int*[w];
+	for(int i = 0 ; i < w ; i++) {
+		cover_map[i] = new int[h];
+
+		//Fill from static map and Region connectability
+		for (int j = 0; j < h; j++) {
+			/*int ok = 1;
+			if (!Broodwar->isBuildable(i, j)) {
+				ok = 0;
+			}
+<<<<<<< .mine
+			cover_map[i][j] = ok;*/
+
+			int ok = 1;
+			if (!Broodwar->isBuildable(i, j)) {
+				ok = 0;
+			}
+
+=======
+
+>>>>>>> .r123
+			cover_map[i][j] = ok;
+		}
+	}
+
+	//Fill from current agents
+	AgentManager* agentManager = AgentManager::getInstance();
+	for (int i = 0; i < (int)agentManager->size(); i++) {
+		BaseAgent* agent = agentManager->at(i);
+		if (agent->isBuilding()) {
+			Corners c = getCorners(agent->getUnit());
+			fill(c);
+		}
+		AgentManager::release(agent);
+	}
+
+	//Fill from minerals
+	for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
+		Corners c;
+		c.x1 = (*m)->getTilePosition().x() - 2;
+		c.y1 = (*m)->getTilePosition().y() - 2;
+		c.x2 = (*m)->getTilePosition().x() + 2;
+		c.y2 = (*m)->getTilePosition().y() + 2;
+		fill(c);
+	}
+
+	//Fill from gas
+	for(set<Unit*>::iterator m = Broodwar->getGeysers().begin(); m != Broodwar->getGeysers().end(); m++) {
+		Corners c;
+		c.x1 = (*m)->getTilePosition().x() - 2;
+		c.y1 = (*m)->getTilePosition().y() - 2;
+		c.x2 = (*m)->getTilePosition().x() + 5;
+		c.y2 = (*m)->getTilePosition().y() + 3;
+		fill(c);
+	}
+}
+
+Unit* CoverMap::findWorker() {
+	BaseAgent* worker = AgentManager::getInstance()->getAgent(Broodwar->self()->getRace().getWorker());
+	if (worker != NULL) {
+		return worker->getUnit();
+	}
+	return NULL;
+}
+
+void CoverMap::blockPosition(TilePosition buildSpot) {
+	cover_map[buildSpot.x()][buildSpot.y()] = 0;
+}
+
+bool CoverMap::canBuild(UnitType toBuild, TilePosition buildSpot) {
+	Corners c = getCorners(toBuild, buildSpot);
+
+	//Special case: Keep some space around pylons, but only when they are placed.
+	if (BaseAgent::isOfType(toBuild, UnitTypes::Protoss_Pylon)) {
+		c.x1 = c.x1 - 0;
+		c.y1 = c.y1 - 0;
+		c.x2 = c.x2 + 1;
+		c.y2 = c.y2 + 1;
+	}
+
+	//Step 1: Check covermap.
+	for (int x = c.x1; x <= c.x2; x++) {
+		for (int y = c.y1; y <= c.y2; y++) {
+			if (x >= 0 && x < w && y >= 0 && y < h) {
+				if (cover_map[x][y] == 0) {
+					//Cant build here.
+					return false;
+				}
+			}
+			else {
+				//Out of bounds
+				return false;
+			}
+		}
+	}
+
+	//Step 2: Check if path is available
+	if (!ExplorationManager::canReach(Broodwar->self()->getStartLocation(), buildSpot)) {
+		return false;
+	}
+
+	//Step 3: Check canBuild
+	Unit* worker = findWorker();
+	if (worker == NULL) {
+		//No worker available
+		return false;
+	}
+
+	//Step 4: Check any units on tile
+	if((int)Broodwar->unitsOnTile(buildSpot.x(), buildSpot.y()).size() > 0) {
+		return false;
+	}
+
+	//All passed. It is possible to build here.
+	return true;
+}
+
+TilePosition CoverMap::findBuildSpot(UnitType toBuild, TilePosition start) {
+	//Broodwar->printf("Find buildspot for %s (%d,%d)", toBuild.getName().c_str(), start.x(), start.y());
+	if (toBuild.isRefinery()) {
+		//Use refinery method
+		return findRefineryBuildSpot(toBuild, start);
+	}
+
+	TilePosition bestSpot = TilePosition(-1, -1);
+	double bestDist = -1;
+
+	for (int x = start.x() - range; x <= start.x() + range; x++) {
+		for (int y = start.y() - range; y <= start.y() + range; y++) {
+			//Out of bounds check
+			if (x >= 0 && x < w && y >= 0 && y < h) {
+				//Can build check
+				TilePosition pos = TilePosition(x, y);
+
+				if (canBuild(toBuild, pos)) {
+					//We can build. Check range
+					double cDist = pos.getDistance(start);
+					if (bestDist < 0 || cDist < bestDist) {
+						//We found a valid spot.
+						bestDist = cDist;
+						bestSpot = pos;
+					}
+				}
+			}
+		}
+	}
+
+	return bestSpot;
+}
+
+void CoverMap::addConstructedBuilding(Unit* unit) {
+	if (unit->getType().isAddon()) {
+		//Addons are handled by their main buildings
+		return;
+	}
+
+	Corners c = getCorners(unit);
+	fill(c);
+}
+
+void CoverMap::buildingDestroyed(Unit* unit) {
+	if (unit->getType().isAddon()) {
+		//Addons are handled by their main buildings
+		return;
+	}
+
+	Corners c = getCorners(unit);
+	clear(c);
+}
+
+void CoverMap::fill(Corners c) {
+	for (int x = c.x1; x <= c.x2; x++) {
+		for (int y = c.y1; y <= c.y2; y++) {
+			if (x >= 0 && x < w && y >= 0 && y < h) {
+				cover_map[x][y] = 0;
+			}
+		}
+	}
+}
+
+void CoverMap::clear(Corners c) {
+	for (int x = c.x1; x <= c.x2; x++) {
+		for (int y = c.y1; y <= c.y2; y++) {
+			if (x >= 0 && x < w && y >= 0 && y < h) {
+				cover_map[x][y] = 1;
+			}
+		}
+	}
+}
+
+Corners CoverMap::getCorners(Unit* unit) {
+	return getCorners(unit->getType(), unit->getTilePosition());
+}
+
+Corners CoverMap::getCorners(UnitType type, TilePosition center) {
+	int x1 = center.x();
+	int y1 = center.y();
+	int x2 = x1 + type.tileWidth() - 1;
+	int y2 = y1 + type.tileHeight() - 1;
+
+	int margin = 1;
+
+	if (BaseAgent::isOfType(type, UnitTypes::Terran_Supply_Depot)) {
+		margin = 0;
+		x2++;
+		y2++;
+	}
+	if (BaseAgent::isOfType(type, UnitTypes::Protoss_Pylon)) {
+		margin = 0;
+	}
+
+	x1 -= margin;
+	x2 += margin;
+	y1 -= margin;
+	y2 += margin;
+
+	//Special case: Terran Addon buildings
+	//Add 2 extra spaces to the right to make space for the addons.
+	if (BaseAgent::isOfType(type, UnitTypes::Terran_Factory) || BaseAgent::isOfType(type, UnitTypes::Terran_Starport) || BaseAgent::isOfType(type, UnitTypes::Terran_Command_Center) || BaseAgent::isOfType(type, UnitTypes::Terran_Science_Facility)) {
+		x2 += 2;
+	}
+
+	Corners c;
+	c.x1 = x1;
+	c.y1 = y1;
+	c.x2 = x2;
+	c.y2 = y2;
+
+	return c;
+}
+
+TilePosition CoverMap::findRefineryBuildSpot(UnitType toBuild, TilePosition start) {
+	TilePosition buildSpot = findClosestGasWithoutRefinery(toBuild, start);
+	if (buildSpot.x() >= 0) {
+		//Check distance to refinery. If too far, dont build there.
+		double bestDist = -1;
+		AgentManager* agentManager = AgentManager::getInstance();
+		for (int i = 0; i < (int)agentManager->size(); i++) {
+			BaseAgent* agent = agentManager->at(i);
+			if (agent->isAlive() && agent->getUnit()->getType().isResourceDepot()) {
+				double cDist = agent->getUnit()->getDistance(Position(buildSpot));
+				if (analyzed) {
+					cDist = BWTA::getGroundDistance(agent->getUnit()->getTilePosition(), buildSpot);
+				}
+				if (!ExplorationManager::canReach(agent->getUnit()->getTilePosition(), buildSpot)) {
+					cDist = -1;
+				}
+				if (bestDist < 0 || cDist < bestDist) {
+					bestDist = cDist;
+				}
+			}
+			AgentManager::release(agent);
+		}
+		if (bestDist > 1000) {
+			Broodwar->printf("Vespene Gas too far away. Skipping Refinery.");
+			if (BuildPlanner::isTerran()) {
+				BuildPlanner::getInstance()->unlock(UnitTypes::Terran_Refinery);
+			}
+			if (BuildPlanner::isProtoss()) {
+				BuildPlanner::getInstance()->unlock(UnitTypes::Protoss_Assimilator);
+			}
+			return TilePosition(-1, -1);
+		}
+		if (bestDist < 0) {
+			Broodwar->printf("No path to Vespene Gas. Skipping Refinery.");
+			if (BuildPlanner::isTerran()) {
+				BuildPlanner::getInstance()->unlock(UnitTypes::Terran_Refinery);
+			}
+			if (BuildPlanner::isProtoss()) {
+				BuildPlanner::getInstance()->unlock(UnitTypes::Protoss_Assimilator);
+			}
+			return TilePosition(-1, -1);
+		}
+	}
+	return buildSpot;
+}
+
+TilePosition CoverMap::findClosestGasWithoutRefinery(UnitType toBuild, TilePosition start) {
+	TilePosition buildSpot = TilePosition(-1, -1);
+
+	Unit* worker = findWorker();
+	Unit* closestGas=NULL;
+
+	if (worker != NULL) {
+		for(set<Unit*>::iterator m = Broodwar->getGeysers().begin(); m != Broodwar->getGeysers().end(); m++) {
+			if (closestGas == NULL || (*m)->getDistance(Position(start)) < closestGas->getDistance(Position(start))) {
+				if (Broodwar->canBuildHere(worker, (*m)->getTilePosition(), toBuild)) {
+					closestGas=*m;
+				}
+			}
+		}
+	}
+
+	if (closestGas != NULL) {
+		return closestGas->getTilePosition();
+	}
+
+	//No visible spot found. Check ExplorationManager
+	SpottedObject obj = ExplorationManager::getInstance()->findSpottedGeyser();
+	if (obj.getUnitID() != -1) {
+		return obj.getTilePosition();
+	}
+
+	return TilePosition(-1, -1);
+}
+
+CoverMap::~CoverMap() {
+	for(int i = 0 ; i < w ; i++) {
+		delete[] cover_map[i];
+	}
+	delete[] cover_map;
+
+	instanceFlag = false;
+	delete instance;
+}
+
+CoverMap* CoverMap::getInstance() {
+	if (!instanceFlag) {
+		instance = new CoverMap();
+		instanceFlag = true;
+	}
+	return instance;
+}

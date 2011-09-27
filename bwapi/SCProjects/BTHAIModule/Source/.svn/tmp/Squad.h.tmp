@@ -1,0 +1,201 @@
+#ifndef __SQUAD_H__
+#define __SQUAD_H__
+
+#include "BaseAgent.h"
+
+using namespace BWAPI;
+using namespace std;
+
+/** This struct holds the number of units of a specified type
+ * a squad has, and needs. */
+struct UnitSetup {
+	UnitType type;
+	int no;
+	int current;
+
+	bool equals(UnitType mType) {
+		//Special case: Siege Tanks
+		if (mType.getID() == UnitTypes::Terran_Siege_Tank_Siege_Mode.getID()) {
+			mType = UnitTypes::Terran_Siege_Tank_Tank_Mode;
+		}
+
+		if (mType.getID() == type.getID()) {
+			return true;
+		}
+		
+		return false;
+	}
+};
+
+/** The Squad class represents a squad of units with a shared goal, for example
+ * attacking the enemy or defending the base. The Squad can be built up from
+ * different combinations and numbers of UnitTypes. 
+ *
+ * Author: Johan Hagelback (johan.hagelback@gmail.com)
+ */
+class Squad {
+
+private:
+	vector<BaseAgent*> agents;
+	vector<UnitSetup> setup;
+
+	TilePosition goal;
+	TilePosition safeSpot;
+	
+	void setMemberGoals();
+	void setMemberState(BaseAgent* agent);
+	
+	int id;
+	bool active;
+	int type;
+	string name;
+	bool ready;
+	
+public:
+	/** Creates a squad with a unique id, a type (Offensive, Defensive, Exploration, Support)
+	 * and a name (for example AirAttackSquad, MainGroundSquad). */
+	Squad(int mId, int mType, string mName);
+
+	/** Returns the id for this Squad. */
+	int getID();
+
+	/** Adds a setup for this squad. Setup is a type and amount of units
+	 * that shall be in this Squad. */
+	void addSetup(UnitType type, int no);
+
+	/** Returns all setups for this Squad. Each UnitType in the Squad
+	 * is one setup. */
+	vector<UnitSetup> getSetup();
+
+	/** Returns true if this Squad is active, or false if not.
+	 * A Squad is active when it first has been filled with agents.
+	 * A Squad with destroyed units are still considered Active. */
+	bool isActive();
+
+	/** Returns true if this Squad is full, i.e. it has all the units
+	 * it shall have. */
+	bool isFull();
+
+	/** Returns the health percentage for this Squad. Health pct means how
+	 * full the Squad is. An empty Squad returns 0, a full Squad 100 and a
+	 * half full Squad 75. */
+	int getHealthPct();
+
+	/** Called each update to issue orders. */
+	void computeActions();
+
+	/** Returns true if this Squad is gathered, i.e. if 90% of its units
+	 * are within a certain range of each other. */
+	bool isGathered();
+
+	/** Check if this Squad need units of the specified type. */
+	bool needUnit(UnitType type);
+
+	/** Adds an agent to this Squad. */
+	bool addMember(BaseAgent* agent);
+
+	/** Returns the members of this Squad. */
+	vector<BaseAgent*> getMembers();
+
+	/** Removes an agent from this Squad. */
+	void removeMember(BaseAgent* agent);
+
+	/** Removes an agent of the specified type from this Squad,
+	 * and returns the reference to the removed agent. */
+	BaseAgent* removeMember(UnitType type);
+
+	/** Sets the goal for this Squad. */
+	void setGoal(TilePosition mGoal);
+
+	/** Sets the safe spot for this Squad, i.e. where the
+	 Squad gathers up before engaging the enemy. */
+	void setSafeSpot(TilePosition mSafeSpot);
+
+	/** Clears the goal for this Squad, i.e. sets the goal
+	 * to TilePosition(-1,-1). */
+	void clearGoal();
+
+	/** Returns the current goal of this Squad. */
+	TilePosition getGoal();
+
+	/** Returns the safe spot set for this Squad, or TilePosition(-1,-1)
+	 * if safe spot is missing. */
+	TilePosition getSafeSpot();
+
+	/** Returns true if this Squad has a safe spot set, false if not. */
+	bool hasSafeSpot();
+
+	/** Returns true if this squad has an assigned goal. */
+	bool hasGoal();
+
+	/** Returns true if the goal of this squad is the same as the
+	 * specified goal, false if not. */
+	bool isThisGoal(TilePosition mGoal);
+
+	/** Returns true if the goal of this squad is close to the specified goal. */
+	bool isCloseTo(TilePosition mGoal);
+
+	/** Returns the center position of this Squad, i.e. the
+	 * average x and y position of its members. */
+	TilePosition getCenter();
+
+	/** Returns true if this is an Offensive Squad. */
+	bool isOffensive();
+
+	/** Returns true if this is a Defensive Squad. */
+	bool isDefensive();
+
+	/** Returns true if this is an Explorer Squad. */
+	bool isExplorer();
+
+	/** Returns true if this is a Suppoer Squad (for
+	 * example Transports). */
+	bool isSupport();
+
+	/** Returns the size of the Squad, i.e. the number
+	 * if agents currently in it. */
+	int getSize();
+
+	/** Returns the current strength of the Squad, i.e.
+	 * the sum of the destroyScore() for all Squad members. */
+	int getStrength();
+
+	/** Disbands this Squad and send its remaining members to
+	 * a retreat point. */
+	void disband(TilePosition retreatPoint);
+
+	/** Used to print some info to the screen. */
+	void printInfo();
+
+	/** Used to print some info to the screen. 
+	 * Shows printInfo() plus all members of the
+	 * Squad. */
+	void printFullInfo();
+
+	/** Checks if this Squad can merge with the specified Squad.
+	 * if they can, a merge is performed. */
+	bool canMerge(Squad* squad);
+
+	/** Returns true if this Squad has the number of the specified
+	 * unit types in it. */
+	bool hasUnits(UnitType type, int no);
+
+	/** Sets that this Squad is ready to attack, or not. */
+	void setReady(bool mReady);
+
+	/** Returns true if this squad is ready to attack, i.e. has
+	 * gathered around the safe spot. */
+	bool isReady();
+
+	/** Offensive Squad */
+	static const int OFFENSIVE = 0;
+	/** Defensive Squad */
+	static const int DEFENSIVE = 1;
+	/** Explorer Squad */
+	static const int EXPLORER = 2;
+	/** Support Squad */
+	static const int SUPPORT = 3;
+	
+};
+
+#endif

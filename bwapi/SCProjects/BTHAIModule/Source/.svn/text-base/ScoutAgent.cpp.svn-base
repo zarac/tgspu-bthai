@@ -1,0 +1,36 @@
+#include "ScoutAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+ScoutAgent::ScoutAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("ScoutAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void ScoutAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	bool defensive = false;
+	int eCnt = enemyAttackingUnitsWithinRange(11 * 32);
+	if (eCnt > 0) {
+		defensive = true;
+	}
+	int fCnt = friendlyUnitsWithinRange(6 * 32);
+	if (fCnt >= 8) {
+		defensive = false;
+	}
+	
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+}
+
+string ScoutAgent::getTypeName() {
+	return "ScoutAgent";
+}

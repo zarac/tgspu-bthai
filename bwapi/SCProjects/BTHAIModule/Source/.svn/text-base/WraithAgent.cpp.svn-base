@@ -1,0 +1,75 @@
+#include "WraithAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+WraithAgent::WraithAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("WraithAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void WraithAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	if (checkUseCloak()) {
+		return;
+	}
+
+	if (currentState != EXPLORE) {
+		bool defensive = false;
+		int eCnt = this->enemyAttackingUnitsWithinRange(11 * 32);
+		if (eCnt > 0) {
+			defensive = true;
+		}
+		if (unit->isCloaked() && !unit->isDetected()) {
+			defensive = false;
+		}
+		PFManager::getInstance()->computeAttackingUnitActions(this, goal, false);
+	}
+	else {
+		if (goal.x() >= 0) {
+			bool ok = unit->rightClick(Position(goal));
+			if (!ok) {
+				Broodwar->printf("[%d] Explorer unable to reach goal", unitID);
+			}
+		}
+	}
+}
+
+bool WraithAgent::checkUseCloak() {
+	TechType cloak = TechTypes::Cloaking_Field;
+	if (Broodwar->self()->hasResearched(cloak)) {
+		if (!unit->isCloaked()) {
+			if (unit->getEnergy() >= 25 && !isDetectorWithinRange(unit->getTilePosition(), 192)) {
+				int range = 10 * 32;
+				int eCnt = enemyUnitsWithinRange(range);
+				if (eCnt > 0) {
+					unit->useTech(cloak);
+					return true;
+				}
+			}
+		}
+		//Dont decloak since it is costly to first use cloak and
+		//keeping it up is cheap.
+		/*if (unit->isCloaked()) {
+			int range = 10 * 32;
+			int eCnt = enemyUnitsWithinRange(range);
+			if (eCnt == 0) {
+				unit->decloak();
+				return true;
+			}
+		}*/
+	}
+	return false;
+}
+
+string WraithAgent::getTypeName() {
+	return "WraithAgent";
+}

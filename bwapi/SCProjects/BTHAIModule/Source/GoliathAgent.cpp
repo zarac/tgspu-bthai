@@ -1,0 +1,42 @@
+#include "GoliathAgent.h"
+#include "PFManager.h"
+#include "AgentManager.h"
+
+GoliathAgent::GoliathAgent(Unit* mUnit) {
+	unit = mUnit;
+	unitID = unit->getID();
+	//Broodwar->printf("GoliathAgent created (%s)", unit->getType().getName().c_str());
+	lastFrame = 0;
+
+	goal = TilePosition(-1, -1);
+}
+
+void GoliathAgent::computeActions() {
+	int cFrame = Broodwar->getFrameCount();
+	if (cFrame - lastFrame < 20) {
+		return;
+	}
+	lastFrame = cFrame;
+
+	bool defensive = false;
+
+	//Check if we have enemy flying units nearby, if so attack them as prio 1.
+	for(set<Unit*>::const_iterator i=Broodwar->enemy()->getUnits().begin();i!=Broodwar->enemy()->getUnits().end();i++) {
+		if ((*i)->getType().isFlyer()) {
+			double dist = unit->getDistance((*i));
+			if (dist <= 224) { //Range is 5 tiles, but we check closest 7 tiles
+				//Enemy unit discovered. Attack with all workers.
+				unit->attackUnit((*i));
+				return;
+			}
+		}
+	}
+	
+	//TODO: Add unitspecific code here
+
+	PFManager::getInstance()->computeAttackingUnitActions(this, goal, defensive);
+}
+
+string GoliathAgent::getTypeName() {
+	return "GoliathAgent";
+}
