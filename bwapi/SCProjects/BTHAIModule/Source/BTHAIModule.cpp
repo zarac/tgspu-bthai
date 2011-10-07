@@ -76,7 +76,8 @@ void BTHAIModule::onEnd(bool isWinner) {
 	else {
 		Broodwar->printf("BTHAI lost");
 	}
-	statistics->WriteStatisticsFile(isWinner);
+	// hkl : faq fix
+	//statistics->WriteStatisticsFile(isWinner);
 	delete(statistics);
 	running = false;
 }
