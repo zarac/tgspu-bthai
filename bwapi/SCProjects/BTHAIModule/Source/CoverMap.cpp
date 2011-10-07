@@ -119,7 +119,8 @@ bool CoverMap::canBuild(UnitType toBuild, TilePosition buildSpot) {
 
 	//Step 5: If Protoss, check PSI coverage
 	if (BuildPlanner::isProtoss()) {
-		if (!UnitAgent::isOfType(toBuild, UnitTypes::Protoss_Pylon)) {
+		// hkl faq-fix
+		if (!UnitAgent::isOfType(toBuild, UnitTypes::Protoss_Pylon) || !UnitAgent::isOfType(toBuild, UnitTypes::Protoss_Nexus)) {
 			if (!Broodwar->hasPower(buildSpot, toBuild.tileWidth(), toBuild.tileHeight())) {
 				return false;
 			}
