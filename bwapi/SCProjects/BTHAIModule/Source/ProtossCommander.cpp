@@ -7,6 +7,7 @@ ProtossCommander::ProtossCommander() {
 	currentState = DEFEND;
 
 	addMainAttackSquad();
+	addDragoonSquad();
 	
 	//TODO: Add more squads here.
 }
@@ -16,6 +17,14 @@ ProtossCommander::~ProtossCommander() {
 		delete squads.at(i);
 	}
 	delete instance;
+}
+
+
+void ProtossCommander::addDragoonSquad() {
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "DragoonSquad");
+	squad->addSetup(UnitTypes::Protoss_Dragoon, 12);
+	squads.push_back(squad);
+	currentID++;
 }
 
 void ProtossCommander::addMainAttackSquad() {

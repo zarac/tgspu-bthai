@@ -15,6 +15,7 @@ class ProtossCommander : public Commander {
 
 private:
 	void addMainAttackSquad();
+	void addDragoonSquad();
 
 public:
 	ProtossCommander();
