@@ -75,6 +75,13 @@ void ZergBuildPlanner::computeActions() {
 }
 
 void ZergBuildPlanner::unlock(UnitType type) {
+	for (vector<UnitType>::iterator it = buildOrder.begin(); it != buildOrder.end(); it++) {
+		if (it->getID() == type.getID()) {
+			locked = false;
+			buildOrder.erase(it);
+			return;
+		}
+	}
 }
 
 bool ZergBuildPlanner::shallBuildOverlord() {
