@@ -42,10 +42,10 @@ void BTHAIModule::onStart() {
 	//Analyze map using BWTA
 	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)AnalyzeThread, NULL, 0, NULL);
 
-	show_bullets=false;
-	show_visibility_data=false;
-	show_terrain_data=false;
-	show_goals=false;
+	show_bullets=true;
+	show_visibility_data=true;
+	show_terrain_data=true;
+	show_goals=true;
 
 	BuildPlanner::getInstance();
 
