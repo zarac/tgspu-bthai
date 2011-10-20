@@ -45,10 +45,14 @@ BaseAgent* BaseAgent::getAgentReference(AgentRemovedEvent eventCallback, void* O
 
 void BaseAgent::removeAgentReference(AgentRemovedEvent eventCallback, void* ObjectToStore)
 {
-	for(int i = 0; i != eventCallbacks.size(); i++)
+	// hkl : rasmus fix (i think)
+	for(unsigned int i = 0; i < eventCallbacks.size(); i++)
 	{
 		if(eventCallbacks.at(i).eventCallback == eventCallback && eventCallbacks.at(i).ObjectToStore == ObjectToStore)
+		{
 			eventCallbacks.erase(eventCallbacks.begin() + i);
+			i--;
+		}
 	}
 }
 
