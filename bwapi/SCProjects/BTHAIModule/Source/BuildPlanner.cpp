@@ -4,6 +4,7 @@
 #include "AgentManager.h"
 #include "TerranBuildPlanner.h"
 #include "ProtossBuildPlanner.h"
+#include "ZergBuildPlanner.h"
 #include "ExplorationManager.h"
 
 BuildPlanner* BuildPlanner::instance = NULL;
@@ -27,6 +28,9 @@ BuildPlanner* BuildPlanner::getInstance() {
 		}
 		if (isProtoss()) {
 			instance = new ProtossBuildPlanner();
+		}
+		if (isZerg()) {
+			instance = new ZergBuildPlanner();
 		}
 	}
 	return instance;
@@ -129,6 +133,10 @@ bool BuildPlanner::mineralsRunningLow() {
 	if (isProtoss()) {
 		baseType = UnitTypes::Protoss_Nexus;
 	}
+	else if (isZerg()) {
+		baseType = UnitTypes::Zerg_Hatchery;
+	}
+
 
 	int mineralLimit = 1200; //TODO: Is this a good limit?
 

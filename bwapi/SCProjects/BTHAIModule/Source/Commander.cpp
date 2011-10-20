@@ -1,6 +1,7 @@
 #include "Commander.h"
 #include "TerranCommander.h"
 #include "ProtossCommander.h"
+#include "ZergCommander.h"
 #include "AgentManager.h"
 #include "ExplorationManager.h"
 #include "SpottedObject.h"
@@ -27,6 +28,9 @@ Commander* Commander::getInstance() {
 		}
 		if (BuildPlanner::isProtoss()) {
 			instance = new ProtossCommander();
+		}
+		if (BuildPlanner::isZerg()) {
+			instance = new ZergCommander();
 		}
 	}
 	return instance;
