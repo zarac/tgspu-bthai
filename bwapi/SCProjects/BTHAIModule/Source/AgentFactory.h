@@ -23,6 +23,7 @@ private:
 	static bool instanceFlag;
 	BaseAgent* createTerranAgent(Unit* unit);
 	BaseAgent* createProtossAgent(Unit* unit);
+	BaseAgent* createZergAgent(Unit* unit);
 	
 public:
 	~AgentFactory();

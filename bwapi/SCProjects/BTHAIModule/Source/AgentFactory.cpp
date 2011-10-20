@@ -56,6 +56,9 @@
 #include "ShieldBatteryAgent.h"
 #include "HighTemplarAgent.h"
 
+// ZERGZ0R
+#include "HatcheryAgent.h"
+
 bool AgentFactory::instanceFlag = false;
 AgentFactory* AgentFactory::instance = NULL;
 
@@ -82,6 +85,9 @@ BaseAgent* AgentFactory::createAgent(Unit* unit) {
 	}
 	if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) {
 		return createProtossAgent(unit);
+	}
+	if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) {
+		return createZergAgent(unit);
 	}
 
 	//Default agents
@@ -282,6 +288,45 @@ BaseAgent* AgentFactory::createProtossAgent(Unit* unit) {
 		}
 		else if (isOfType(unit, UnitTypes::Protoss_High_Templar)) {
 			return new HighTemplarAgent(unit);
+		}
+		else {
+			//Default unit agent
+			return new UnitAgent(unit);
+		}
+#else
+		return new UnitAgent(unit);
+#endif
+	}
+	return NULL;
+}
+
+
+BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
+	Broodwar->printf("Creating zerg agent...");
+	Broodwar->printf("is of type? %d", unit->getType());
+	//Broodwar->printf("is worker? %s", unit->getType().isWorker());
+	if (unit->getType().isWorker()) {
+		return new WorkerAgent(unit);
+	}
+	else if (unit->getType().isBuilding()) {
+		//Add agents for special buildings here
+		if (isOfType(unit, UnitTypes::Zerg_Hatchery)) {
+			return new HatcheryAgent(unit);
+		}
+		else {
+			//Default structure agent
+			return new StructureAgent(unit);
+		}
+	}
+	else {
+#if DISABLE_UNIT_AI == 0
+		if (isOfType(unit, UnitTypes::Zerg_Drone)) {
+			// TODO : ...
+			return new ZealotAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
+			// TODO : ...
+			return new ZealotAgent(unit);
 		}
 		else {
 			//Default unit agent
