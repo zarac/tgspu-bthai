@@ -66,6 +66,7 @@ void ZergBuildPlanner::computeActions() {
 	}
 
 	if (shallBuildOverlord()) {
+		//buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
 		// TODO : implement...
 	}
 
@@ -89,14 +90,16 @@ bool ZergBuildPlanner::shallBuildOverlord() {
 	int supplyTotal = Broodwar->self()->supplyTotal() / 2;
 	int supplyUsed = Broodwar->self()->supplyUsed() / 2;
 	if (supplyTotal - supplyUsed > 4) {
+		Broodwar->printf("No overlord needed.");
 		return false;
 	}
 
-	//3. Check if there is a Pylon already in the list
+	//3. Check if there is a Overlord already in the list
 	if ((int)buildOrder.size() > 0) {
-		//if (buildOrder.at(0).getID() == UnitTypes::Zerg_.getID()) {
-			//return false;
-		//}
+		if (buildOrder.at(0).getID() == UnitTypes::Zerg_Overlord.getID()) {
+			Broodwar->printf("Overlord already in list.");
+			return false;
+		}
 	}
 
 	AgentManager *agentManager = AgentManager::getInstance();
@@ -104,18 +107,19 @@ bool ZergBuildPlanner::shallBuildOverlord() {
 	for (int i = 0; i < (int)agentManager->size(); i++) {
 		BaseAgent* agent = agentManager->at(i);
 		if (agent->isAlive()) {
-			//if (agent->getUnit()->getType().getID() == UnitTypes::Zerg_Overlord.getID()) {
-			//	if (agent->getUnit()->isBeingConstructed()) {
-			//		//Found one that is being constructed
-			//		AgentManager::release(agent);
-			//		return false;
-			//	}
-			//}
+			if (agent->getUnit()->getType().getID() == UnitTypes::Zerg_Overlord.getID()) {
+				if (agent->getUnit()->isBeingConstructed()) {
+					//Found one that is being constructed
+					AgentManager::release(agent);
+					Broodwar->printf("Overlord already being constructed.");
+					return false;
+				}
+			}
 		}
 		AgentManager::release(agent);
 	}
 
-	Broodwar->printf("Supplies: %d/%d. Adding Pylon to buildorder", supplyUsed, supplyTotal);
+	Broodwar->printf("Supplies: %d/%d. Adding Overlor to buildorder", supplyUsed, supplyTotal);
 
 	return true;
 }

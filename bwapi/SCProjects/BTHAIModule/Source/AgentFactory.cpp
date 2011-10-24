@@ -58,6 +58,8 @@
 
 // ZERGZ0R
 #include "HatcheryAgent.h"
+#include "ZerglingAgent.h"
+#include "HydraliskAgent.h"
 
 bool AgentFactory::instanceFlag = false;
 AgentFactory* AgentFactory::instance = NULL;
@@ -320,13 +322,13 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 	}
 	else {
 #if DISABLE_UNIT_AI == 0
-		if (isOfType(unit, UnitTypes::Zerg_Drone)) {
+		if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
 			// TODO : ...
-			return new ZealotAgent(unit);
+			return new ZerglingAgent(unit);
 		}
-		else if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
+		else if (isOfType(unit, UnitTypes::Zerg_Hydralisk)) {
 			// TODO : ...
-			return new ZealotAgent(unit);
+			return new HydraliskAgent(unit);
 		}
 		else {
 			//Default unit agent
