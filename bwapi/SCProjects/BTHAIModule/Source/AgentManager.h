@@ -36,6 +36,9 @@ public:
 	 * unit is built. */
 	void addAgent(Unit* unit);
 
+	/** Takes care of changing agent on morph. (for zerg) */
+	void addMorphAgent(Unit* unit);
+
 	/** Removes an agent from the container. Is called each time
 	 * a unit is destroyed. The agents are not directly removed, but
 	 * set to inactive and are removed during the cleanup. */

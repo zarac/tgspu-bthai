@@ -58,6 +58,7 @@
 
 // ZERGZ0R
 #include "HatcheryAgent.h"
+#include "ExtractorAgent.h"
 #include "ZerglingAgent.h"
 #include "HydraliskAgent.h"
 
@@ -304,9 +305,6 @@ BaseAgent* AgentFactory::createProtossAgent(Unit* unit) {
 
 
 BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
-	Broodwar->printf("Creating zerg agent...");
-	Broodwar->printf("is of type? %d", unit->getType());
-	//Broodwar->printf("is worker? %s", unit->getType().isWorker());
 	if (unit->getType().isWorker()) {
 		return new WorkerAgent(unit);
 	}
@@ -314,6 +312,9 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 		//Add agents for special buildings here
 		if (isOfType(unit, UnitTypes::Zerg_Hatchery)) {
 			return new HatcheryAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Extractor)) {
+			return new ExtractorAgent(unit);
 		}
 		else {
 			//Default structure agent
@@ -323,11 +324,9 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 	else {
 #if DISABLE_UNIT_AI == 0
 		if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
-			// TODO : ...
 			return new ZerglingAgent(unit);
 		}
 		else if (isOfType(unit, UnitTypes::Zerg_Hydralisk)) {
-			// TODO : ...
 			return new HydraliskAgent(unit);
 		}
 		else {

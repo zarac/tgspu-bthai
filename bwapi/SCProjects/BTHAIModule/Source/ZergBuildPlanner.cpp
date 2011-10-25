@@ -14,9 +14,13 @@ ZergBuildPlanner::~ZergBuildPlanner() {
 
 void ZergBuildPlanner::init() {
 	buildOrder.push_back(UnitTypes::Zerg_Spawning_Pool);
-	
-	//TODO: This is your buildorder. Add more here.
-
+	buildOrder.push_back(UnitTypes::Zerg_Extractor);
+	buildOrder.push_back(UnitTypes::Zerg_Hydralisk_Den);
+	buildOrder.push_back(UnitTypes::Zerg_Hatchery);
+	buildOrder.push_back(UnitTypes::Zerg_Evolution_Chamber);
+	buildOrder.push_back(UnitTypes::Zerg_Extractor);
+	buildOrder.push_back(UnitTypes::Zerg_Evolution_Chamber);
+	buildOrder.push_back(UnitTypes::Zerg_Hatchery);
 	level = 1;
 }
 
@@ -25,6 +29,9 @@ ZergCommander* ZergBuildPlanner::getCommanderInstance() {
 }
 
 void ZergBuildPlanner::computeActions() {
+	
+	buildOverlordIfNeeded();
+
 	//NOTE: No need to change this unless some special logic
 	//shall be added.
 
@@ -65,11 +72,6 @@ void ZergBuildPlanner::computeActions() {
 		}
 	}
 
-	if (shallBuildOverlord()) {
-		//buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
-		// TODO : implement...
-	}
-
 	if (mineralsRunningLow()) {
 		buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
 	}
@@ -85,41 +87,46 @@ void ZergBuildPlanner::unlock(UnitType type) {
 	}
 }
 
-bool ZergBuildPlanner::shallBuildOverlord() {
+bool ZergBuildPlanner::buildOverlordIfNeeded() {
+	
+	//1. Make sure we've got minerals.
+	if (Broodwar->self()->minerals() < 100)
+		return false;
+
 	//2. Check if we need supplies
 	int supplyTotal = Broodwar->self()->supplyTotal() / 2;
 	int supplyUsed = Broodwar->self()->supplyUsed() / 2;
 	if (supplyTotal - supplyUsed > 4) {
-		Broodwar->printf("No overlord needed.");
+		//Broodwar->printf("No overlord needed.");
 		return false;
 	}
 
-	//3. Check if there is a Overlord already in the list
-	if ((int)buildOrder.size() > 0) {
-		if (buildOrder.at(0).getID() == UnitTypes::Zerg_Overlord.getID()) {
-			Broodwar->printf("Overlord already in list.");
+	//3. Check if there is a Overlord already being built
+	std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
+	for (unsigned int i = 0; i < agents.size(); i++)
+	{
+		BaseAgent *agent = agents.at(i);
+		if (agent->isOfType(UnitTypes::Zerg_Egg)
+			&& agent->getUnit()->getBuildType() == UnitTypes::Zerg_Overlord)
+		{
+			//Broodwar->printf("already training overlord");
 			return false;
 		}
 	}
 
-	AgentManager *agentManager = AgentManager::getInstance();
-	//4. Check if we are already building a Pylon
-	for (int i = 0; i < (int)agentManager->size(); i++) {
-		BaseAgent* agent = agentManager->at(i);
-		if (agent->isAlive()) {
-			if (agent->getUnit()->getType().getID() == UnitTypes::Zerg_Overlord.getID()) {
-				if (agent->getUnit()->isBeingConstructed()) {
-					//Found one that is being constructed
-					AgentManager::release(agent);
-					Broodwar->printf("Overlord already being constructed.");
-					return false;
-				}
-			}
-		}
-		AgentManager::release(agent);
-	}
+	Broodwar->printf("Supplies: %d/%d. Building Overlord.", supplyUsed, supplyTotal);
 
-	Broodwar->printf("Supplies: %d/%d. Adding Overlor to buildorder", supplyUsed, supplyTotal);
+	//std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
+	for (unsigned int i = 0; i < agents.size(); i++)
+	{
+		BaseAgent *agent = agents.at(i);
+		if (agent->isOfType(UnitTypes::Zerg_Larva))
+		{
+			Broodwar->printf("unit is larva, training overlord");
+			agent->getUnit()->train(UnitTypes::Zerg_Overlord);
+			return true;
+		}
+	}
 
 	return true;
 }

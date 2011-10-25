@@ -13,7 +13,8 @@ class ZergCommander : public Commander {
 
 private:
 	void addMainAttackSquad();
-	void addDragoonSquad();
+	void addHydraliskSquad();
+	int hydraSquads;
 
 public:
 	ZergCommander();

@@ -352,7 +352,8 @@ void BTHAIModule::onUnitMorph(BWAPI::Unit* unit)
 	if (!Broodwar->isReplay()) {
 		//Broodwar->sendText("A %s [%x] has been morphed at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 		if (unit->getPlayer()->getID() == Broodwar->self()->getID()) {
-			AgentManager::getInstance()->addAgent(unit);
+			//AgentManager::getInstance()->addAgent(unit);
+			AgentManager::getInstance()->addMorphAgent(unit);
 			BuildPlanner::getInstance()->unlock(unit->getType());
 		}
 	}

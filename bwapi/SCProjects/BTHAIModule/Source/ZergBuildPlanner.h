@@ -20,7 +20,7 @@ using namespace std;
 class ZergBuildPlanner : public BuildPlanner {
 
 private:
-	bool shallBuildOverlord();
+	bool buildOverlordIfNeeded();
 	int level;
 	ZergCommander* getCommanderInstance();
 

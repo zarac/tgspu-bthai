@@ -7,7 +7,7 @@ HatcheryAgent::HatcheryAgent(Unit* mUnit) {
 	unit = mUnit;
 	unitID = unit->getID();
 	Broodwar->printf("HatcheryAgent created (%s)", unit->getType().getName().c_str());
-	idealNoWorkers = 10;
+	idealNoWorkers = 7;
 	level = 1;
 
 	if (analyzed) {
@@ -22,6 +22,13 @@ HatcheryAgent::HatcheryAgent(Unit* mUnit) {
 }
 
 void HatcheryAgent::computeActions() {
+	UnitType hydralisk = UnitTypes::Zerg_Hydralisk;
+	if (Commander::getInstance()->needUnit(hydralisk)) {
+		if (canBuild(hydralisk)) {
+			unit->train(hydralisk);
+			return;
+		}
+	}
 
 	UnitType zergling = UnitTypes::Zerg_Zergling;
 	if (Commander::getInstance()->needUnit(zergling)) {
@@ -60,19 +67,26 @@ void HatcheryAgent::computeActions() {
 		}
 	}
 
-	if (level == 1) {
-		if (AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) > 0) {
-			level = 2;
-			idealNoWorkers = 20;
-			//Broodwar->printf("[Nexus] Reached level 2");
-		}
+	if (level == 1
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Overlord) > 1)
+	{
+		level = 2;
+		idealNoWorkers = 15;
+		Broodwar->printf("[Hatchery] Reached level 2");
 	}
-	if (level == 2) {
-		if (AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0) {
-			level = 3;
-			idealNoWorkers = 30;
-			//Broodwar->printf("[Nexus] Reached level 3");
-		}
+	else if (level == 2 && 
+		AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) > 0)
+	{
+		level = 3;
+		idealNoWorkers = 20;
+		Broodwar->printf("[Hatchery] Reached level 3");
+	}
+	else if (level == 3
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0)
+	{
+		level = 4;
+		idealNoWorkers = 50;
+		Broodwar->printf("[Hatchery] Reached level 4");
 	}
 
 	int noWorkers = AgentManager::getInstance()->getNoWorkers();

@@ -3,9 +3,11 @@
 #include "ExplorationManager.h"
 
 ZergCommander::ZergCommander() {
-	currentID = 1;	
+	currentID = 1;
 	currentState = DEFEND;
 	addMainAttackSquad();
+	hydraSquads = 0;
+	addHydraliskSquad();
 }
 
 void ZergCommander::addMainAttackSquad() {
@@ -13,6 +15,16 @@ void ZergCommander::addMainAttackSquad() {
 	squad->addSetup(UnitTypes::Zerg_Zergling, 4);
 	squads.push_back(squad);
 	currentID++;
+}
+
+void ZergCommander::addHydraliskSquad()
+{
+	Broodwar->printf("Adding a hydralisk squad.");
+	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "HydraliskSquad");
+	squad->addSetup(UnitTypes::Zerg_Hydralisk, 12);
+	squads.push_back(squad);
+	currentID++;
+	hydraSquads++;
 }
 
 ZergCommander::~ZergCommander() {
@@ -69,4 +81,9 @@ void ZergCommander::computeActions() {
 			}
 		}
 	}
+
+	if (Broodwar->self()->minerals() > 1000 &&
+		Broodwar->self()->gas() > 1000
+		&& hydraSquads < 5)
+		addHydraliskSquad();
 }

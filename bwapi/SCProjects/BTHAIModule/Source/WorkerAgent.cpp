@@ -200,6 +200,7 @@ TilePosition WorkerAgent::findStartPoint() {
 	}
 
 	if (toBuild.isResourceDepot()) {
+		Broodwar->printf("RESOURCE DEPOT");
 		//CommandCenter or Nexus. Build near 2nd mineral patch.
 		bool found = false;
 		TilePosition home = Broodwar->self()->getStartLocation();
@@ -207,6 +208,21 @@ TilePosition WorkerAgent::findStartPoint() {
 		double bestDist = -1;
 		Unit* mineral = NULL;
 
+		//for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
+		//	double dist = (*m)->getDistance(Position(home));
+		//	double dist = GetDistanceToClosestBase((*m)->getTilePosition());
+
+
+		//	if (dist >= 500) {
+		//		if (bestDist < 0 || dist < bestDist) {
+		//			if (ExplorationManager::canReach(home, (*m)->getTilePosition())) {
+		//				mineral = (*m);
+		//				bestDist = dist;
+		//				found = true;
+		//			}
+		//		}
+		//	}
+		//}
 		for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
 			double dist = (*m)->getDistance(Position(home));
 			if (dist >= 500) {

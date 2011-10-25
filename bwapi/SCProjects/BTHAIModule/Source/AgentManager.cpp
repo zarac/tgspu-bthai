@@ -123,6 +123,28 @@ void AgentManager::addAgent(Unit* unit) {
 	}
 }
 
+void AgentManager::addMorphAgent(Unit *unit)
+{
+	// Remove old agent.
+	for (int i = 0; i < (int)agents.size(); i++) {
+		if (agents.at(i)->matches(unit)) {
+			removeAgent(unit);
+		}
+	}
+
+	// Create new... yeah!
+	BaseAgent* newAgent = AgentFactory::getInstance()->createAgent(unit);
+	agents.push_back(newAgent);
+
+	if (newAgent->isBuilding()) {
+		CoverMap::getInstance()->addConstructedBuilding(unit);
+	}
+
+	if (newAgent->isUnit()) {
+		Commander::getInstance()->unitCreated(newAgent);
+	}
+}
+
 void AgentManager::removeAgent(Unit* unit) {
 	for (int i = 0; i < (int)agents.size(); i++) {
 		if (agents.at(i)->matches(unit)) {
