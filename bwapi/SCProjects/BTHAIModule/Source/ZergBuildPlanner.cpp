@@ -87,6 +87,7 @@ void ZergBuildPlanner::unlock(UnitType type) {
 	}
 }
 
+/** Build an overlord if needed. Returns true if the case was so. */
 bool ZergBuildPlanner::buildOverlordIfNeeded() {
 	
 	//1. Make sure we've got minerals.
@@ -114,7 +115,7 @@ bool ZergBuildPlanner::buildOverlordIfNeeded() {
 		}
 	}
 
-	Broodwar->printf("Supplies: %d/%d. Building Overlord.", supplyUsed, supplyTotal);
+	Broodwar->printf("Supplies: %d/%d. Building Overlord. Frame count: %d", supplyUsed, supplyTotal, Broodwar->getFrameCount());
 
 	//std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
 	for (unsigned int i = 0; i < agents.size(); i++)

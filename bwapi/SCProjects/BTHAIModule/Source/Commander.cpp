@@ -126,9 +126,9 @@ void Commander::unitDestroyed(BaseAgent* agent) {
 		}
 		// remove empty squad
 		//for ( // I AM HERE
-		//if (squad->getMembers().size() == 0)
+		if (squad->getMembers().size() == 0)
+			squad->disband(squad->getCenter());
 		//	squads.erase(squads.begin());
-
 	}
 }
 
