@@ -184,30 +184,6 @@
 				RelativePath=".\Source\Dll.cpp"
 				>
 			</File>
-			<File
-				RelativePath=".\Source\ExtractorAgent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\HatcheryAgent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\HydraliskAgent.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZergBuildPlanner.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZergCommander.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZerglingAgent.cpp"
-				>
-			</File>
 			<Filter
 				Name="PotentialFields"
 				>
@@ -555,6 +531,50 @@
 					RelativePath=".\Source\Statistics.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Zerg"
+				>
+				<Filter
+					Name="Commander"
+					>
+					<File
+						RelativePath=".\Source\ZergCommander.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="UnitAgents"
+					>
+					<File
+						RelativePath=".\Source\HydraliskAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\ZerglingAgent.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="StructureAgents"
+					>
+					<File
+						RelativePath=".\Source\ExtractorAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HatcheryAgent.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Managers"
+					>
+					<File
+						RelativePath=".\Source\ZergBuildPlanner.cpp"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter
