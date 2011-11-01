@@ -16,6 +16,7 @@ void ZergBuildPlanner::init() {
 	buildOrder.push_back(UnitTypes::Zerg_Spawning_Pool);
 	buildOrder.push_back(UnitTypes::Zerg_Extractor);
 	buildOrder.push_back(UnitTypes::Zerg_Hydralisk_Den);
+	//buildOrder.push_back(UnitTypes::Zerg_Sunken_Colony);
 	buildOrder.push_back(UnitTypes::Zerg_Hatchery);
 	buildOrder.push_back(UnitTypes::Zerg_Evolution_Chamber);
 	buildOrder.push_back(UnitTypes::Zerg_Extractor);
@@ -87,9 +88,11 @@ void ZergBuildPlanner::unlock(UnitType type) {
 	}
 }
 
-/** Build an overlord if needed. Returns true if the case was so. */
+/** Build an overlord if needed. Returns true if the case was so.
+Should perhaps be the job of ZergCommander? */
 bool ZergBuildPlanner::buildOverlordIfNeeded() {
-	
+	//Broodwar->printf("minerals : %i , supply: %i,%i", Broodwar->self()->minerals(), Broodwar->self()->supplyUsed(), Broodwar->self()->supplyTotal());
+
 	//1. Make sure we've got minerals.
 	if (Broodwar->self()->minerals() < 100)
 		return false;
@@ -97,7 +100,7 @@ bool ZergBuildPlanner::buildOverlordIfNeeded() {
 	//2. Check if we need supplies
 	int supplyTotal = Broodwar->self()->supplyTotal() / 2;
 	int supplyUsed = Broodwar->self()->supplyUsed() / 2;
-	if (supplyTotal - supplyUsed > 4) {
+	if (supplyTotal - supplyUsed > 6 || supplyTotal == 200) {
 		//Broodwar->printf("No overlord needed.");
 		return false;
 	}
@@ -107,15 +110,19 @@ bool ZergBuildPlanner::buildOverlordIfNeeded() {
 	for (unsigned int i = 0; i < agents.size(); i++)
 	{
 		BaseAgent *agent = agents.at(i);
-		if (agent->isOfType(UnitTypes::Zerg_Egg)
-			&& agent->getUnit()->getBuildType() == UnitTypes::Zerg_Overlord)
+		if (agent->isOfType(UnitTypes::Zerg_Egg))
 		{
-			//Broodwar->printf("already training overlord");
-			return false;
+			//Broodwar->printf("found egg, checking for overlord");
+			// TODO : do we need to check for in case an overlord is being morphed?
+			if (agent->getUnit()->getBuildType() == UnitTypes::Zerg_Overlord)
+			{
+				//Broodwar->printf("already training overlord");
+				return false;
+			}
 		}
 	}
 
-	Broodwar->printf("Supplies: %d/%d. Building Overlord. Frame count: %d", supplyUsed, supplyTotal, Broodwar->getFrameCount());
+	//Broodwar->printf("Supplies: %d/%d. Building Overlord. Frame count: %d", supplyUsed, supplyTotal, Broodwar->getFrameCount());
 
 	//std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
 	for (unsigned int i = 0; i < agents.size(); i++)
@@ -128,8 +135,8 @@ bool ZergBuildPlanner::buildOverlordIfNeeded() {
 			return true;
 		}
 	}
-
-	return true;
+	//Broodwar->printf("No larva for available, not training.");
+	return false;
 }
 
 void ZergBuildPlanner::buildingDestroyed(Unit* building) {

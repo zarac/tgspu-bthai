@@ -165,6 +165,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				CommandLine="cd $(SolutionDir) &amp; install.bat"
 			/>
 		</Configuration>
 	</Configurations>
@@ -590,30 +591,6 @@
 				RelativePath=".\Source\BWTAExtern.h"
 				>
 			</File>
-			<File
-				RelativePath=".\Source\ExtractorAgent.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\HatcheryAgent.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\HydraliskAgent.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZergBuildPlanner.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZergCommander.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Source\ZerglingAgent.h"
-				>
-			</File>
 			<Filter
 				Name="StructureAgents"
 				>
@@ -961,6 +938,50 @@
 					RelativePath=".\source\Statistics.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Zerg"
+				>
+				<Filter
+					Name="Commander"
+					>
+					<File
+						RelativePath=".\Source\ZergCommander.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="Managers"
+					>
+					<File
+						RelativePath=".\Source\ZergBuildPlanner.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="UnitAgents"
+					>
+					<File
+						RelativePath=".\Source\HydraliskAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\ZerglingAgent.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="StructureAgents"
+					>
+					<File
+						RelativePath=".\Source\ExtractorAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HatcheryAgent.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

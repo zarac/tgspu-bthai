@@ -14,7 +14,10 @@ class ZergCommander : public Commander {
 private:
 	void addMainAttackSquad();
 	void addHydraliskSquad();
+	void manageLevel();
 	int hydraSquads;
+	int idealWorkerCount;
+	int level;
 
 public:
 	ZergCommander();
@@ -22,6 +25,7 @@ public:
 
 	/** Called each update to issue orders. */
 	void computeActions();
+	int getIdealWorkerCount();
 
 };
 

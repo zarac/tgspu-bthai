@@ -2,6 +2,7 @@
 #include "AgentManager.h"
 #include "WorkerAgent.h"
 #include "PFManager.h"
+#include "ZergBuildPlanner.h"
 
 HatcheryAgent::HatcheryAgent(Unit* mUnit) {
 	unit = mUnit;
@@ -67,32 +68,14 @@ void HatcheryAgent::computeActions() {
 		}
 	}
 
-	if (level == 1
-		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Overlord) > 1)
-	{
-		level = 2;
-		idealNoWorkers = 15;
-		Broodwar->printf("[Hatchery] Reached level 2");
-	}
-	else if (level == 2 && 
-		AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) > 0)
-	{
-		level = 3;
-		idealNoWorkers = 20;
-		Broodwar->printf("[Hatchery] Reached level 3");
-	}
-	else if (level == 3
-		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0)
-	{
-		level = 4;
-		idealNoWorkers = 50;
-		Broodwar->printf("[Hatchery] Reached level 4");
-	}
-
+	int idealWorkerCount = ((ZergCommander*)Commander::getInstance())->getIdealWorkerCount();
+	// TODO : move to commander ?
 	int noWorkers = AgentManager::getInstance()->getNoWorkers();
-	if (noWorkers < idealNoWorkers) {
+	//Broodwar->printf("[Hatchery] checking if we need workers (we have %i and want %i)", noWorkers, idealWorkerCount);
+	if (noWorkers < idealWorkerCount) {
 		UnitType worker = Broodwar->self()->getRace().getWorker();
 		if (canBuild(worker)) {
+			Broodwar->printf("[Hatchery] training on yeah");
 			unit->train(worker);
 		}
 	}

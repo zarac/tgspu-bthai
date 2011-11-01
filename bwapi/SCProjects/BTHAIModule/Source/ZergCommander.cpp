@@ -8,6 +8,8 @@ ZergCommander::ZergCommander() {
 	addMainAttackSquad();
 	hydraSquads = 0;
 	addHydraliskSquad();
+	level = 0;
+	idealWorkerCount = 1;
 }
 
 void ZergCommander::addMainAttackSquad() {
@@ -35,6 +37,8 @@ ZergCommander::~ZergCommander() {
 }
 
 void ZergCommander::computeActions() {
+	manageLevel();
+
 	if (currentState == DEFEND) {
 		int noOffSquads = 0;
 
@@ -82,8 +86,46 @@ void ZergCommander::computeActions() {
 		}
 	}
 
+	// adding hydralisk squad, 'cause it's great fun! : )
 	if (Broodwar->self()->minerals() > 1000 &&
 		Broodwar->self()->gas() > 1000
 		&& hydraSquads < 5)
 		addHydraliskSquad();
+}
+
+void ZergCommander::manageLevel()
+{
+	if (level == 0)
+	{
+		level = 1;
+		Broodwar->printf("[ZergCommander] Reached level 1");
+		idealWorkerCount = 7;
+	}
+	// TODO : check if we're training overlord, then we can count that as well
+	else if (level == 1
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Overlord) > 1)
+	{
+		level = 2;
+		idealWorkerCount = 15;
+		Broodwar->printf("[ZergCommander] Reached level 2");
+	}
+	else if (level == 2 && 
+		AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) > 0)
+	{
+		level = 3;
+		idealWorkerCount = 20;
+		Broodwar->printf("[ZergCommander] Reached level 3");
+	}
+	else if (level == 3
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0)
+	{
+		level = 4;
+		idealWorkerCount = 50;
+		Broodwar->printf("[ZergCommander] Reached level 4");
+	}
+}
+
+int ZergCommander::getIdealWorkerCount()
+{
+	return idealWorkerCount;
 }
