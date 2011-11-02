@@ -23,6 +23,14 @@ HatcheryAgent::HatcheryAgent(Unit* mUnit) {
 }
 
 void HatcheryAgent::computeActions() {
+	
+	// upgrade to lair if level 5
+	int level = ((ZergCommander*)Commander::getInstance())->getLevel();
+	if (level >= 5 && unit->getType() != UnitTypes::Zerg_Lair)
+	{
+		unit->morph(UnitTypes::Zerg_Lair);
+	}
+
 	UnitType hydralisk = UnitTypes::Zerg_Hydralisk;
 	if (Commander::getInstance()->needUnit(hydralisk)) {
 		if (canBuild(hydralisk)) {
@@ -75,7 +83,7 @@ void HatcheryAgent::computeActions() {
 	if (noWorkers < idealWorkerCount) {
 		UnitType worker = Broodwar->self()->getRace().getWorker();
 		if (canBuild(worker)) {
-			Broodwar->printf("[Hatchery] training on yeah");
+			Broodwar->printf("[Hatchery] Training worker, oh yeah!");
 			unit->train(worker);
 		}
 	}

@@ -21,6 +21,7 @@ class ZergBuildPlanner : public BuildPlanner {
 
 private:
 	bool buildOverlordIfNeeded();
+	bool buildHatcheryIfNeeded();
 	int level;
 	ZergCommander* getCommanderInstance();
 

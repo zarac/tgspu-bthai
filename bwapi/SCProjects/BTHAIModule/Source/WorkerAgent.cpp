@@ -247,6 +247,8 @@ TilePosition WorkerAgent::findStartPoint() {
 		}
 	}
 
+	Broodwar->printf("Building at : %d,%d", start.x(), start.y());
+
 	return start;
 }
 

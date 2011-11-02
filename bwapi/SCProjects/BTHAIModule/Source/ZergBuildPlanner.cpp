@@ -16,12 +16,17 @@ void ZergBuildPlanner::init() {
 	buildOrder.push_back(UnitTypes::Zerg_Spawning_Pool);
 	buildOrder.push_back(UnitTypes::Zerg_Extractor);
 	buildOrder.push_back(UnitTypes::Zerg_Hydralisk_Den);
-	//buildOrder.push_back(UnitTypes::Zerg_Sunken_Colony);
 	buildOrder.push_back(UnitTypes::Zerg_Hatchery);
 	buildOrder.push_back(UnitTypes::Zerg_Evolution_Chamber);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
 	buildOrder.push_back(UnitTypes::Zerg_Extractor);
 	buildOrder.push_back(UnitTypes::Zerg_Evolution_Chamber);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
 	buildOrder.push_back(UnitTypes::Zerg_Hatchery);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
+	buildOrder.push_back(UnitTypes::Zerg_Creep_Colony);
 	level = 1;
 }
 
@@ -32,6 +37,8 @@ ZergCommander* ZergBuildPlanner::getCommanderInstance() {
 void ZergBuildPlanner::computeActions() {
 	
 	buildOverlordIfNeeded();
+
+	buildHatcheryIfNeeded();
 
 	//NOTE: No need to change this unless some special logic
 	//shall be added.
@@ -86,6 +93,41 @@ void ZergBuildPlanner::unlock(UnitType type) {
 			return;
 		}
 	}
+}
+
+/** Build another hatchery, if it seems like a good time */
+bool ZergBuildPlanner::buildHatcheryIfNeeded()
+{
+	// count hatcheries
+	std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
+	int hatcheries = 0;
+	for (unsigned int i = 0; i < agents.size(); i++)
+	{
+		BaseAgent *agent = agents.at(i);
+		if (agent->isOfType(UnitTypes::Zerg_Hatchery))
+		{
+			hatcheries++;
+		}
+	}
+
+	//1. Make sure we have plenty of cache but not so many hatcheries.
+	if (Broodwar->self()->minerals() < 300 || hatcheries < 12)
+		return false;
+
+	//2. Make sure we're not already building one.
+	for (unsigned int i = 0; i < agents.size(); i++)
+	{
+		BaseAgent *agent = agents.at(i);
+		if (agent->isOfType(UnitTypes::Zerg_Hatchery)
+			&& !agent->getUnit()->isCompleted())
+		{
+			return false;
+		}
+	}
+
+	//Add one to beginning of build-order.
+	buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
+
 }
 
 /** Build an overlord if needed. Returns true if the case was so.

@@ -18,6 +18,7 @@ private:
 	int hydraSquads;
 	int idealWorkerCount;
 	int level;
+	Squad* sixPool;
 
 public:
 	ZergCommander();
@@ -26,6 +27,8 @@ public:
 	/** Called each update to issue orders. */
 	void computeActions();
 	int getIdealWorkerCount();
+	int getLevel();
+	int getState();
 
 };
 

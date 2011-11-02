@@ -560,11 +560,31 @@
 					Name="StructureAgents"
 					>
 					<File
+						RelativePath=".\Source\CreepColonyAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\EvolutionChamberAgent.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\Source\ExtractorAgent.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\Source\HatcheryAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HydraliskDenAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SpawningPoolAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SunkenColonyAgent.cpp"
 						>
 					</File>
 				</Filter>
@@ -974,11 +994,31 @@
 					Name="StructureAgents"
 					>
 					<File
+						RelativePath=".\Source\CreepColonyAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\EvolutionChamberAgent.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Source\ExtractorAgent.h"
 						>
 					</File>
 					<File
 						RelativePath=".\Source\HatcheryAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\HydraliskDenAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SpawningPoolAgent.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\SunkenColonyAgent.h"
 						>
 					</File>
 				</Filter>

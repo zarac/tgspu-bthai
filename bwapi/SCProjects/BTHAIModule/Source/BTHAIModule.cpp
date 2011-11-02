@@ -6,6 +6,7 @@
 #include "ExplorationManager.h"
 #include "CoverMap.h"
 #include "Commander.h"
+#include "ZergCommander.h"
 using namespace BWAPI;
 
 bool analyzed;
@@ -164,6 +165,10 @@ void BTHAIModule::onFrame() {
 	if (Broodwar->getFrameCount() % 202 == 0) {
 		AgentManager::getInstance()->cleanup();
 	}
+
+	int noWorkers = AgentManager::getInstance()->getNoWorkers();
+	ZergCommander* zergCommander = (ZergCommander*)Commander::getInstance();
+	Broodwar->drawText(0, 100, 5, "state : %s    level : %i    workers(goal) : %i(%i)", zergCommander->getState(), zergCommander->getLevel(), noWorkers, zergCommander->getIdealWorkerCount());
 }
 
 void BTHAIModule::onSendText(std::string text) {

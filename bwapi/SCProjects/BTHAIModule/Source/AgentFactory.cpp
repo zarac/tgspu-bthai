@@ -57,10 +57,15 @@
 #include "HighTemplarAgent.h"
 
 // ZERGZ0R
-#include "HatcheryAgent.h"
+#include "CreepColonyAgent.h"
+#include "EvolutionChamberAgent.h"
 #include "ExtractorAgent.h"
-#include "ZerglingAgent.h"
+#include "HatcheryAgent.h"
 #include "HydraliskAgent.h"
+#include "HydraliskDenAgent.h"
+#include "SpawningPoolAgent.h"
+#include "SunkenColonyAgent.h"
+#include "ZerglingAgent.h"
 
 bool AgentFactory::instanceFlag = false;
 AgentFactory* AgentFactory::instance = NULL;
@@ -313,8 +318,23 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 		if (isOfType(unit, UnitTypes::Zerg_Hatchery)) {
 			return new HatcheryAgent(unit);
 		}
+		else if (isOfType(unit, UnitTypes::Zerg_Creep_Colony)) {
+			return new CreepColonyAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Evolution_Chamber)) {
+			return new EvolutionChamberAgent(unit);
+		}
 		else if (isOfType(unit, UnitTypes::Zerg_Extractor)) {
 			return new ExtractorAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Hydralisk_Den)) {
+			return new HydraliskDenAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Spawning_Pool)) {
+			return new SpawningPoolAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Sunken_Colony)) {
+			return new SunkenColonyAgent(unit);
 		}
 		else {
 			//Default structure agent

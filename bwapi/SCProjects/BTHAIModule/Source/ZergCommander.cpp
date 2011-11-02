@@ -3,18 +3,25 @@
 #include "ExplorationManager.h"
 
 ZergCommander::ZergCommander() {
-	currentID = 1;
-	currentState = DEFEND;
-	addMainAttackSquad();
-	hydraSquads = 0;
-	addHydraliskSquad();
 	level = 0;
 	idealWorkerCount = 1;
+	currentState = DEFEND;
+	currentID = 1;
+	hydraSquads = 0;
+
+	addMainAttackSquad();
+	addHydraliskSquad();
+
+	sixPool = new Squad(currentID, Squad::OFFENSIVE, "Six-Pool");
+	sixPool->addSetup(UnitTypes::Zerg_Zergling, 6);
+	squads.push_back(sixPool);
+	currentID++;
 }
 
 void ZergCommander::addMainAttackSquad() {
 	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "MainAttackSquad");
-	squad->addSetup(UnitTypes::Zerg_Zergling, 4);
+	squad->addSetup(UnitTypes::Zerg_Zergling, 2);
+	squad->addSetup(UnitTypes::Zerg_Hydralisk, 10);
 	squads.push_back(squad);
 	currentID++;
 }
@@ -23,7 +30,7 @@ void ZergCommander::addHydraliskSquad()
 {
 	Broodwar->printf("Adding a hydralisk squad.");
 	Squad* squad = new Squad(currentID, Squad::OFFENSIVE, "HydraliskSquad");
-	squad->addSetup(UnitTypes::Zerg_Hydralisk, 12);
+	squad->addSetup(UnitTypes::Zerg_Hydralisk, 24);
 	squads.push_back(squad);
 	currentID++;
 	hydraSquads++;
@@ -50,7 +57,7 @@ void ZergCommander::computeActions() {
 
 		//Time to attack
 		//TODO: Currently attacks when we have 2 full squads. Change if needed.
-		if (noOffSquads >= 2) {
+		if (noOffSquads >= 1) {
 			currentState = ATTACK;
 		}
 	}
@@ -86,6 +93,9 @@ void ZergCommander::computeActions() {
 		}
 	}
 
+	TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
+	sixPool->setGoal(closest);
+
 	// adding hydralisk squad, 'cause it's great fun! : )
 	if (Broodwar->self()->minerals() > 1000 &&
 		Broodwar->self()->gas() > 1000
@@ -120,12 +130,29 @@ void ZergCommander::manageLevel()
 		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0)
 	{
 		level = 4;
-		idealWorkerCount = 50;
+		idealWorkerCount = 40;
 		Broodwar->printf("[ZergCommander] Reached level 4");
+	}
+	else if (level == 4
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Sunken_Colony) >= 2)
+	{
+		level = 5;
+		idealWorkerCount = 50;
+		Broodwar->printf("[ZergCommander] Reached level 5");
 	}
 }
 
 int ZergCommander::getIdealWorkerCount()
 {
 	return idealWorkerCount;
+}
+
+int ZergCommander::getLevel()
+{
+	return level;
+}
+
+int ZergCommander::getState()
+{
+	return currentState;
 }
