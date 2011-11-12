@@ -552,6 +552,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Source\OverlordAgent.cpp"
+						>
+					</File>
+					<File
 						RelativePath=".\Source\ZerglingAgent.cpp"
 						>
 					</File>
@@ -577,6 +581,10 @@
 					</File>
 					<File
 						RelativePath=".\Source\HydraliskDenAgent.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Source\LairAgent.cpp"
 						>
 					</File>
 					<File
@@ -986,6 +994,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Source\OverlordAgent.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Source\ZerglingAgent.h"
 						>
 					</File>
@@ -1014,6 +1026,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\Source\LairAgent.h"
+						>
+					</File>
+					<File
 						RelativePath=".\Source\SpawningPoolAgent.h"
 						>
 					</File>
@@ -1030,6 +1046,10 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<File
+			RelativePath=".\notes.txt"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -1,0 +1,16 @@
+TODO
+
+- Overlord's should explore (and make sure they're out of the way of new buildings)
+
+- Expand (base-wise)
+
+- Spire > mutas
+
+- Expand onto islands
+
+- Fix unit movement in fight (should fall back then surround at right side of choke point
+
+- Lurker upgrade
+
+- Not all larvas seem to be used.
+

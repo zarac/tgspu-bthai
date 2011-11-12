@@ -617,6 +617,6 @@ void UnitAgent::printInfo() {
 		state = "Bunkered";
 	}
 	
-	Broodwar->printf("[%d] %s, SquadID: %d Goal: (%d,%d)  %s", unitID, state.c_str(), squadID, goal.x(), goal.y(), info.c_str());
+	Broodwar->printf("[%d] (%s) %s, SquadID: %d Position: (%d,%d) Goal: (%d,%d)  %s", unitID, getTypeName().c_str(), state.c_str(), squadID, TilePosition(unit->getPosition()).x(), TilePosition(unit->getPosition()).y(), goal.x(), goal.y(), info.c_str());
 }
 

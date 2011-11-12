@@ -15,8 +15,10 @@ private:
 	void addMainAttackSquad();
 	void addHydraliskSquad();
 	void manageLevel();
+	void updateWorkersNeeded();
 	int hydraSquads;
 	int idealWorkerCount;
+	int workersNeeded;
 	int level;
 	Squad* sixPool;
 
@@ -26,7 +28,10 @@ public:
 
 	/** Called each update to issue orders. */
 	void computeActions();
+	int getHydraliskSquadsCount();
 	int getIdealWorkerCount();
+	int getWorkersNeeded();
+	void setWorkersNeeded(int);
 	int getLevel();
 	int getState();
 

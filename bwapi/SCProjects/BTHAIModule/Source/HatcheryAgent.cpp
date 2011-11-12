@@ -23,7 +23,6 @@ HatcheryAgent::HatcheryAgent(Unit* mUnit) {
 }
 
 void HatcheryAgent::computeActions() {
-	
 	// upgrade to lair if level 5
 	int level = ((ZergCommander*)Commander::getInstance())->getLevel();
 	if (level >= 5 && unit->getType() != UnitTypes::Zerg_Lair)
@@ -76,17 +75,45 @@ void HatcheryAgent::computeActions() {
 		}
 	}
 
-	int idealWorkerCount = ((ZergCommander*)Commander::getInstance())->getIdealWorkerCount();
-	// TODO : move to commander ?
-	int noWorkers = AgentManager::getInstance()->getNoWorkers();
-	//Broodwar->printf("[Hatchery] checking if we need workers (we have %i and want %i)", noWorkers, idealWorkerCount);
-	if (noWorkers < idealWorkerCount) {
-		UnitType worker = Broodwar->self()->getRace().getWorker();
-		if (canBuild(worker)) {
-			Broodwar->printf("[Hatchery] Training worker, oh yeah!");
-			unit->train(worker);
-		}
+	ZergCommander* zc = ((ZergCommander*)Commander::getInstance());
+	UnitType worker = Broodwar->self()->getRace().getWorker();
+	while (zc->getWorkersNeeded() > 0 && canBuild(worker))
+	{
+		Broodwar->printf("building a worker...");
+		zc->setWorkersNeeded(zc->getWorkersNeeded()-1);
+		unit->train(worker);
 	}
+
+	//int idealWorkerCount = ((ZergCommander*)Commander::getInstance())->getIdealWorkerCount();
+	//// TODO : move to commander ?
+	//int noWorkers = AgentManager::getInstance()->getNoWorkers();
+	////Broodwar->printf("[Hatchery] checking if we need workers (we have %i and want %i)", noWorkers, idealWorkerCount);
+	//if (noWorkers < idealWorkerCount) {
+	//	UnitType worker = Broodwar->self()->getRace().getWorker();
+	//	if (canBuild(worker)) {
+	//		
+	//		//3. Check if there is a Worker already being built
+	//		bool shouldTrainWorker = true;
+	//		std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
+	//		for (unsigned int i = 0; i < agents.size(); i++)
+	//		{
+	//			BaseAgent *agent = agents.at(i);
+	//			if (agent->isOfType(UnitTypes::Zerg_Egg))
+	//			{
+	//				//Broodwar->printf("found egg, checking for overlord");
+	//				// TODO : do we need to check for in case an overlord is being morphed?
+	//				if (agent->getUnit()->getBuildType() == UnitTypes::Zerg_Drone)
+	//				{
+	//					//Broodwar->printf("already training overlord");
+	//					shouldTrainWorker = false;
+	//				}
+	//			}
+	//		}
+	//		//Broodwar->printf("[Hatchery] Training worker, oh yeah!");
+	//		if (shouldTrainWorker)
+	//			unit->train(worker);
+	//	}
+	//}
 }
 
 string HatcheryAgent::getTypeName() {

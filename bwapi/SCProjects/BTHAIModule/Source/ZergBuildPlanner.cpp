@@ -37,7 +37,6 @@ ZergCommander* ZergBuildPlanner::getCommanderInstance() {
 void ZergBuildPlanner::computeActions() {
 	
 	buildOverlordIfNeeded();
-
 	buildHatcheryIfNeeded();
 
 	//NOTE: No need to change this unless some special logic
@@ -80,9 +79,9 @@ void ZergBuildPlanner::computeActions() {
 		}
 	}
 
-	if (mineralsRunningLow()) {
-		buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
-	}
+	//if (mineralsRunningLow()) {
+		//buildOrder.insert(buildOrder.begin(), UnitTypes::Zerg_Hatchery);
+	//}
 }
 
 void ZergBuildPlanner::unlock(UnitType type) {
@@ -172,7 +171,7 @@ bool ZergBuildPlanner::buildOverlordIfNeeded() {
 		BaseAgent *agent = agents.at(i);
 		if (agent->isOfType(UnitTypes::Zerg_Larva))
 		{
-			Broodwar->printf("unit is larva, training overlord");
+			//Broodwar->printf("unit is larva, training overlord");
 			agent->getUnit()->train(UnitTypes::Zerg_Overlord);
 			return true;
 		}

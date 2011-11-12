@@ -168,7 +168,7 @@ void BTHAIModule::onFrame() {
 
 	int noWorkers = AgentManager::getInstance()->getNoWorkers();
 	ZergCommander* zergCommander = (ZergCommander*)Commander::getInstance();
-	Broodwar->drawText(0, 100, 5, "state : %s    level : %i    workers(goal) : %i(%i)", zergCommander->getState(), zergCommander->getLevel(), noWorkers, zergCommander->getIdealWorkerCount());
+	Broodwar->drawText(0, 1, 10, "state:%i level:%i needed/workers/goal:%i/%i/%i hydraSquads:%i", zergCommander->getState(), zergCommander->getLevel(), zergCommander->getWorkersNeeded(), noWorkers, zergCommander->getIdealWorkerCount(), zergCommander->getHydraliskSquadsCount());
 }
 
 void BTHAIModule::onSendText(std::string text) {

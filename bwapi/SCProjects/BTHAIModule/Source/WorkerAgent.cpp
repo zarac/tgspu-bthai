@@ -4,6 +4,7 @@
 #include "ExplorationManager.h"
 #include "PFManager.h"
 #include "CoverMap.h"
+#include "ZergCommander.h"
 #include <sstream>
 
 WorkerAgent::WorkerAgent(Unit* mUnit) {
@@ -201,48 +202,56 @@ TilePosition WorkerAgent::findStartPoint() {
 
 	if (toBuild.isResourceDepot()) {
 		Broodwar->printf("RESOURCE DEPOT");
-		//CommandCenter or Nexus. Build near 2nd mineral patch.
-		bool found = false;
-		TilePosition home = Broodwar->self()->getStartLocation();
+		if (BuildPlanner::isZerg())
+		{
+			ZergCommander* zc = (ZergCommander*)ZergCommander::getInstance();
+			//if (zc->
+		}
+		else
+		{
+			//CommandCenter or Nexus. Build near 2nd mineral patch.
+			bool found = false;
+			TilePosition home = Broodwar->self()->getStartLocation();
 
-		double bestDist = -1;
-		Unit* mineral = NULL;
+			double bestDist = -1;
+			Unit* mineral = NULL;
 
-		//for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
-		//	double dist = (*m)->getDistance(Position(home));
-		//	double dist = GetDistanceToClosestBase((*m)->getTilePosition());
+			//for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
+			//	double dist = (*m)->getDistance(Position(home));
+			//	double dist = GetDistanceToClosestBase((*m)->getTilePosition());
 
 
-		//	if (dist >= 500) {
-		//		if (bestDist < 0 || dist < bestDist) {
-		//			if (ExplorationManager::canReach(home, (*m)->getTilePosition())) {
-		//				mineral = (*m);
-		//				bestDist = dist;
-		//				found = true;
-		//			}
-		//		}
-		//	}
-		//}
-		for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
-			double dist = (*m)->getDistance(Position(home));
-			if (dist >= 500) {
-				if (bestDist < 0 || dist < bestDist) {
-					if (ExplorationManager::canReach(home, (*m)->getTilePosition())) {
-						mineral = (*m);
-						bestDist = dist;
-						found = true;
+			//	if (dist >= 500) {
+			//		if (bestDist < 0 || dist < bestDist) {
+			//			if (ExplorationManager::canReach(home, (*m)->getTilePosition())) {
+			//				mineral = (*m);
+			//				bestDist = dist;
+			//				found = true;
+			//			}
+			//		}
+			//	}
+			//}
+			for(set<Unit*>::iterator m = Broodwar->getMinerals().begin(); m != Broodwar->getMinerals().end(); m++) {
+				double dist = (*m)->getDistance(Position(home));
+				if (dist >= 500) {
+					if (bestDist < 0 || dist < bestDist) {
+						if (ExplorationManager::canReach(home, (*m)->getTilePosition())) {
+							mineral = (*m);
+							bestDist = dist;
+							found = true;
+						}
 					}
 				}
 			}
-		}
-		if (found) {
-			start = mineral->getTilePosition();
-		}
-		else {
-			//Check exploration manager
-			SpottedObject* obj = ExplorationManager::getInstance()->findSpottedMineralPatch();
-			if (obj != NULL) {
-				start = obj->getTilePosition();
+			if (found) {
+				start = mineral->getTilePosition();
+			}
+			else {
+				//Check exploration manager
+				SpottedObject* obj = ExplorationManager::getInstance()->findSpottedMineralPatch();
+				if (obj != NULL) {
+					start = obj->getTilePosition();
+				}
 			}
 		}
 	}
@@ -304,7 +313,7 @@ bool WorkerAgent::assignToFinishBuild(Unit* building) {
 }
 
 bool WorkerAgent::canBuild(UnitType type) {
-	if (unit->isIdle() || (unit->isGatheringMinerals() && !unit->isCarryingMinerals())) {
+	if (/*unit->isIdle() || */(unit->isGatheringMinerals() && !unit->isCarryingMinerals())) {
 		if (Broodwar->canMake(unit, type)) {
 			return true;
 		}

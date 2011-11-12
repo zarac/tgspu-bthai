@@ -5,6 +5,7 @@
 ZergCommander::ZergCommander() {
 	level = 0;
 	idealWorkerCount = 1;
+	workersNeeded = 0;
 	currentState = DEFEND;
 	currentID = 1;
 	hydraSquads = 0;
@@ -12,10 +13,10 @@ ZergCommander::ZergCommander() {
 	addMainAttackSquad();
 	addHydraliskSquad();
 
-	sixPool = new Squad(currentID, Squad::OFFENSIVE, "Six-Pool");
-	sixPool->addSetup(UnitTypes::Zerg_Zergling, 6);
-	squads.push_back(sixPool);
-	currentID++;
+	//sixPool = new Squad(currentID, Squad::DEFENSIVE, "Six-Pool");
+	//sixPool->addSetup(UnitTypes::Zerg_Zergling, 6);
+	//squads.push_back(sixPool);
+	//currentID++;
 }
 
 void ZergCommander::addMainAttackSquad() {
@@ -44,6 +45,24 @@ ZergCommander::~ZergCommander() {
 }
 
 void ZergCommander::computeActions() {
+
+	//map<string, int> agents;
+	AgentManager* agentManager = AgentManager::getInstance();
+	vector<BaseAgent*> agents = agentManager->getAgents();
+	vector<BaseAgent*>::iterator agent = agents.begin();
+	vector<BaseAgent*>::iterator agentsend = agents.end();
+	while (agent != agentsend)
+	{
+		if ((*agent)->getTypeName() == "HatcheryAgent")
+			Broodwar->printf("agent type = %i", (*agent)->getUnit()->getType());
+		agent++;
+	}
+	// Why doesn't this work? (crash)
+	//for (vector<BaseAgent*>::iterator agent = agentManager->getAgents().begin(); agent != agentManager->getAgents().end(); agent++)
+	//{
+	//}
+
+	updateWorkersNeeded();
 	manageLevel();
 
 	if (currentState == DEFEND) {
@@ -57,7 +76,7 @@ void ZergCommander::computeActions() {
 
 		//Time to attack
 		//TODO: Currently attacks when we have 2 full squads. Change if needed.
-		if (noOffSquads >= 1) {
+		if (noOffSquads >= 2) {
 			currentState = ATTACK;
 		}
 	}
@@ -75,10 +94,10 @@ void ZergCommander::computeActions() {
 		}
 	}
 
+	TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
 	if (currentState == ATTACK) {
 		for (int i = 0; i < (int)squads.size(); i++) {
 			if (squads.at(i)->isActive() && squads.at(i)->isOffensive()) {
-				TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
 				if (closest.x() >= 0) {
 					squads.at(i)->setGoal(closest);
 				}
@@ -93,8 +112,8 @@ void ZergCommander::computeActions() {
 		}
 	}
 
-	TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
-	sixPool->setGoal(closest);
+	//TilePosition closest = getClosestEnemyBuilding(Broodwar->self()->getStartLocation());
+	//sixPool->setGoal(closest);
 
 	// adding hydralisk squad, 'cause it's great fun! : )
 	if (Broodwar->self()->minerals() > 1000 &&
@@ -109,42 +128,81 @@ void ZergCommander::manageLevel()
 	{
 		level = 1;
 		Broodwar->printf("[ZergCommander] Reached level 1");
-		idealWorkerCount = 7;
+		idealWorkerCount = 8;
 	}
 	// TODO : check if we're training overlord, then we can count that as well
 	else if (level == 1
-		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Overlord) > 1)
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Overlord) >= 2)
 	{
 		level = 2;
 		idealWorkerCount = 15;
 		Broodwar->printf("[ZergCommander] Reached level 2");
 	}
 	else if (level == 2 && 
-		AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) > 0)
+		AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Extractor) >= 1)
 	{
 		level = 3;
 		idealWorkerCount = 20;
 		Broodwar->printf("[ZergCommander] Reached level 3");
 	}
 	else if (level == 3
-		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) > 0)
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Hydralisk_Den) >= 1)
 	{
 		level = 4;
-		idealWorkerCount = 40;
+		idealWorkerCount = 30;
 		Broodwar->printf("[ZergCommander] Reached level 4");
 	}
 	else if (level == 4
 		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Sunken_Colony) >= 2)
 	{
 		level = 5;
-		idealWorkerCount = 50;
+		idealWorkerCount = 40;
 		Broodwar->printf("[ZergCommander] Reached level 5");
 	}
+	else if (level == 5
+		&& AgentManager::getInstance()->countNoUnits(UnitTypes::Zerg_Spire) >= 1)
+	{
+		level = 6;
+		idealWorkerCount = 50;
+		Broodwar->printf("[ZergCommander] Reached level 6");
+	}
+}
+
+void ZergCommander::updateWorkersNeeded()
+{
+	workersNeeded = idealWorkerCount - AgentManager::getInstance()->getNoWorkers();
+	if (workersNeeded > 0)
+	{
+		//. Check if there is a Worker already being built
+		std::vector<BaseAgent*> agents = AgentManager::getInstance()->getAgents();
+		for (unsigned int i = 0; i < agents.size(); i++)
+		{
+			BaseAgent* agent = agents.at(i);
+			if (agent->isOfType(UnitTypes::Zerg_Egg)
+				&& agent->getUnit()->getBuildType() == UnitTypes::Zerg_Drone)
+					workersNeeded--;
+		}
+	}
+}
+
+int ZergCommander::getHydraliskSquadsCount()
+{
+	return hydraSquads;
 }
 
 int ZergCommander::getIdealWorkerCount()
 {
 	return idealWorkerCount;
+}
+
+int ZergCommander::getWorkersNeeded()
+{
+	return workersNeeded;
+}
+
+void ZergCommander::setWorkersNeeded(int p_workersNeeded)
+{
+	workersNeeded = p_workersNeeded;
 }
 
 int ZergCommander::getLevel()

@@ -63,6 +63,8 @@
 #include "HatcheryAgent.h"
 #include "HydraliskAgent.h"
 #include "HydraliskDenAgent.h"
+#include "LairAgent.h"
+#include "OverlordAgent.h"
 #include "SpawningPoolAgent.h"
 #include "SunkenColonyAgent.h"
 #include "ZerglingAgent.h"
@@ -330,6 +332,9 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 		else if (isOfType(unit, UnitTypes::Zerg_Hydralisk_Den)) {
 			return new HydraliskDenAgent(unit);
 		}
+		else if (isOfType(unit, UnitTypes::Zerg_Lair)) {
+			return new LairAgent(unit);
+		}
 		else if (isOfType(unit, UnitTypes::Zerg_Spawning_Pool)) {
 			return new SpawningPoolAgent(unit);
 		}
@@ -343,11 +348,14 @@ BaseAgent* AgentFactory::createZergAgent(Unit* unit) {
 	}
 	else {
 #if DISABLE_UNIT_AI == 0
-		if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
-			return new ZerglingAgent(unit);
-		}
-		else if (isOfType(unit, UnitTypes::Zerg_Hydralisk)) {
+		if (isOfType(unit, UnitTypes::Zerg_Hydralisk)) {
 			return new HydraliskAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Overlord)) {
+			return new OverlordAgent(unit);
+		}
+		else if (isOfType(unit, UnitTypes::Zerg_Zergling)) {
+			return new ZerglingAgent(unit);
 		}
 		else {
 			//Default unit agent

@@ -57,7 +57,7 @@ void BaseAgent::removeAgentReference(AgentRemovedEvent eventCallback, void* Obje
 }
 
 void BaseAgent::printInfo() {
-	Broodwar->printf("[%d] (%s) %s", unitID, getTypeName().c_str(), info.c_str());
+	Broodwar->printf("[%d] (%s) %s, @%i,%i", unitID, getTypeName().c_str(), info.c_str(), unit->getPosition().x(), unit->getPosition().y());
 }
 
 void BaseAgent::setInfo(string mInfo) {
