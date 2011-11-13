@@ -1,8 +1,12 @@
 #include "ZergCommander.h"
 #include "AgentManager.h"
 #include "ExplorationManager.h"
+#include "Logger.h"
+//#include "afx.h"
 
 ZergCommander::ZergCommander() {
+	Logger* logger = Logger::getInstance();
+	logger->log("hello log");
 	level = 0;
 	idealWorkerCount = 1;
 	workersNeeded = 0;
@@ -45,21 +49,31 @@ ZergCommander::~ZergCommander() {
 }
 
 void ZergCommander::computeActions() {
-
 	//map<string, int> agents;
+	//cstring blah;
+	//blah.
+	//CString::FormatMessage("blah blib luuu %1!s!", "hello");
+	//char str[] = "asf";
+	//sprintf(str, "hejsan %s", " du");
+	//Logger::Log(str);
+	//Logger::Log(string("gege") + string("gogo"));
+	//Logger::Log(strcat_s("concatenaded ", 22, "char[]s"));
 	AgentManager* agentManager = AgentManager::getInstance();
 	vector<BaseAgent*> agents = agentManager->getAgents();
 	vector<BaseAgent*>::iterator agent = agents.begin();
 	vector<BaseAgent*>::iterator agentsend = agents.end();
-	while (agent != agentsend)
-	{
-		if ((*agent)->getTypeName() == "HatcheryAgent")
-			Broodwar->printf("agent type = %i", (*agent)->getUnit()->getType());
-		agent++;
-	}
-	// Why doesn't this work? (crash)
+	//while (agent != agentsend)
+	//{
+	//	if ((*agent)->getTypeName() == "HatcheryAgent")
+	//		Logger::Log("agent type = " + (*agent)->getUnit()->getType());
+	//	agent++;
+	//}
+	//// Why doesn't this work? (crash)
 	//for (vector<BaseAgent*>::iterator agent = agentManager->getAgents().begin(); agent != agentManager->getAgents().end(); agent++)
 	//{
+	//	if ((*agent)->getTypeName() == "HatcheryAgent")
+	//		Logger::Log(",,,agent type = " + (*agent)->getUnit()->getType());
+	//	agent++;
 	//}
 
 	updateWorkersNeeded();

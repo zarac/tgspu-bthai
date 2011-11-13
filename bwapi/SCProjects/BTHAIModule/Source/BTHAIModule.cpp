@@ -7,6 +7,7 @@
 #include "CoverMap.h"
 #include "Commander.h"
 #include "ZergCommander.h"
+#include "Logger.h"
 using namespace BWAPI;
 
 bool analyzed;
@@ -16,6 +17,7 @@ BWTA::Region* enemy_base;
 
 void BTHAIModule::onStart() {
 	nShow_target_lines = 0;
+	Logger::Log("hellooo log, from onStart():");
 
 	std::string VERSION = "1.4";
 
@@ -242,6 +244,7 @@ void BTHAIModule::onSendText(std::string text) {
 		}
 	}
 	else if (text=="i") {
+		Logger::Log("pressed i");
 		set<Unit*> units = Broodwar->getSelectedUnits();
 		if ((int)units.size() > 0) {
 			int unitID = (*units.begin())->getID();
