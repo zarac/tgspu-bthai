@@ -37,8 +37,10 @@ void OverlordAgent::computeActions() {
 			goal.y() == TilePosition(unit->getPosition()).y())
 		{
 
+			//BWTA::getChokepoints
 			//* get next choke point
-			std::set<BWTA::Chokepoint*> chokepoints = home->getChokepoints();
+			//std::set<BWTA::Chokepoint*> chokepoints = home->getChokepoints();
+			std::set<BWTA::Chokepoint*> chokepoints = BWTA::getChokepoints();
 			double distance = 5;
 			double min_length=10000;
 			BWTA::Chokepoint* choke=NULL;
