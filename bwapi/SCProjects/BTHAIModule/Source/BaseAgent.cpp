@@ -219,6 +219,27 @@ BWTA::Chokepoint* BaseAgent::getClosestChokePoint() {
 	return choke;
 }
 
+BWTA::Chokepoint* BaseAgent::getClosestChokePoint(int distance) {
+	if (!analyzed) {
+		return NULL;
+	}
+
+	//get the chokepoints linked to our home region
+	std::set<BWTA::Chokepoint*> chokepoints= home->getChokepoints();
+	double min_length=10000;
+	BWTA::Chokepoint* choke=NULL;
+
+	//iterate through all chokepoints and look for the one with the smallest gap (least width)
+	for(std::set<BWTA::Chokepoint*>::iterator c=chokepoints.begin();c!=chokepoints.end();c++) {
+		double length=(*c)->getWidth();
+		if (distance < length && (length<min_length || choke==NULL)) {
+			min_length=length;
+			choke=*c;
+		}
+	}
+	return choke;
+}
+
 int BaseAgent::getNoChokePoints() {
 	if (!analyzed) {
 		return 1;

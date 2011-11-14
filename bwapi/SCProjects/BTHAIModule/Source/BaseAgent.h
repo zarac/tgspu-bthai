@@ -186,6 +186,9 @@ public:
 	/** Returns the chokepoint closest to the own base. */
 	static BWTA::Chokepoint* getClosestChokePoint();
 
+	/** Returns the chokepoint closest to the own base, although not within given distance. */
+	static BWTA::Chokepoint* getClosestChokePoint(int distance);
+
 	/** Returns the specific chokepoint (0, 1, 2, ...) around the own base. */
 	static BWTA::Chokepoint* getChokePoint(int nr);
 

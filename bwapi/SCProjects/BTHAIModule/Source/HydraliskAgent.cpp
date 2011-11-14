@@ -12,11 +12,11 @@ HydraliskAgent::HydraliskAgent(Unit* mUnit) {
 }
 
 void HydraliskAgent::computeActions() {
-	int cFrame = Broodwar->getFrameCount();
+	/*int cFrame = Broodwar->getFrameCount();
 	if (cFrame - lastFrame < 20) {
 		return;
 	}
-	lastFrame = cFrame;
+	lastFrame = cFrame;*/
 
 	if (currentState != EXPLORE) {
 		bool defensive = false;
@@ -28,6 +28,7 @@ void HydraliskAgent::computeActions() {
 	else {
 		if (goal.x() >= 0) {
 			unit->rightClick(Position(goal));
+			return;
 		}
 	}
 }

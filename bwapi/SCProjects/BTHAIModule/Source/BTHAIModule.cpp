@@ -17,7 +17,7 @@ BWTA::Region* enemy_base;
 
 void BTHAIModule::onStart() {
 	nShow_target_lines = 0;
-	Logger::Log("hellooo log, from onStart():");
+	Logger::Log("onStart():");
 
 	std::string VERSION = "1.4";
 
@@ -72,11 +72,14 @@ void BTHAIModule::onStart() {
 }
 
 void BTHAIModule::onEnd(bool isWinner) {
+	Logger::Log("onEnd():");
 	Broodwar->printf("Game ended");
 	if (isWinner) {
+		Logger::Log("We won! =D");
 		Broodwar->printf("BTHAI won");
 	}
 	else {
+		Logger::Log("We lost! :(");
 		Broodwar->printf("BTHAI lost");
 	}
 	// hkl : faq fix
@@ -244,7 +247,6 @@ void BTHAIModule::onSendText(std::string text) {
 		}
 	}
 	else if (text=="i") {
-		Logger::Log("pressed i");
 		set<Unit*> units = Broodwar->getSelectedUnits();
 		if ((int)units.size() > 0) {
 			int unitID = (*units.begin())->getID();
@@ -265,7 +267,7 @@ void BTHAIModule::onSendText(std::string text) {
 		}
 	}
 	else {
-		Broodwar->printf("You typed '%s'!",text.c_str());
+		Broodwar->sendText(text.c_str());
 	}
 }
 
@@ -288,18 +290,24 @@ void BTHAIModule::onNukeDetect(BWAPI::Position target) {
 }
 
 void BTHAIModule::onUnitDiscover(BWAPI::Unit* unit) {
+	Logger::Log("onUnitDiscover(.):");
+	Logger::Log(unit->getType().getName());
 	/*if (!Broodwar->isReplay() && Broodwar->getFrameCount()>1 && unit->getPlayer()->getID() != Broodwar->self()->getID()) {
 		Broodwar->sendText("A %s [%x] has been discovered at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 	}*/
 }
 
 void BTHAIModule::onUnitEvade(BWAPI::Unit* unit) {
+	Logger::Log("onUnitEvade(.):");
+	Logger::Log(unit->getType().getName());
 	/*if (!Broodwar->isReplay() && Broodwar->getFrameCount()>1 && unit->getPlayer()->getID() != Broodwar->self()->getID()) {
 		Broodwar->sendText("A %s [%x] was last accessible at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 	}*/
 }
 
 void BTHAIModule::onUnitShow(BWAPI::Unit* unit) {
+	Logger::Log("onUnitShow(.):");
+	Logger::Log(unit->getType().getName());
 	/*if (!Broodwar->isReplay() && Broodwar->getFrameCount()>1 && unit->getPlayer()->getID() != Broodwar->self()->getID()) {
 		Broodwar->sendText("A %s [%x] has been spotted at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 	}*/
@@ -314,6 +322,8 @@ void BTHAIModule::onUnitShow(BWAPI::Unit* unit) {
 }
 
 void BTHAIModule::onUnitHide(BWAPI::Unit* unit) {
+	Logger::Log("onUnitHide(.):");
+	Logger::Log(unit->getType().getName());
 	/*if (!Broodwar->isReplay() && Broodwar->getFrameCount()>1 && unit->getPlayer()->getID() != Broodwar->self()->getID()) {
 		Broodwar->sendText("A %s [%x] was last seen at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 	}*/
@@ -321,6 +331,8 @@ void BTHAIModule::onUnitHide(BWAPI::Unit* unit) {
 
 void BTHAIModule::onUnitCreate(BWAPI::Unit* unit)
 {
+	Logger::Log("onUnitCreate(.):");
+	Logger::Log(unit->getType().getName());
 	if (Broodwar->getFrameCount()>1) {
 		if (!Broodwar->isReplay()) {
 			//Broodwar->sendText("A %s [%x] has been created at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
@@ -344,6 +356,8 @@ void BTHAIModule::onUnitCreate(BWAPI::Unit* unit)
 
 void BTHAIModule::onUnitDestroy(BWAPI::Unit* unit)
 {
+	Logger::Log("onUnitDestroy(.):");
+	Logger::Log(unit->getType().getName());
 	if (!Broodwar->isReplay() && Broodwar->getFrameCount()>1 && unit->getPlayer()->getID() != Broodwar->self()->getID()) {
 		ExplorationManager::getInstance()->unitDestroyed(unit);
 	}
@@ -357,6 +371,8 @@ void BTHAIModule::onUnitDestroy(BWAPI::Unit* unit)
 
 void BTHAIModule::onUnitMorph(BWAPI::Unit* unit)
 {
+	Logger::Log("onUnitMorph(.):");
+	Logger::Log(unit->getType().getName());
 	if (!Broodwar->isReplay()) {
 		//Broodwar->sendText("A %s [%x] has been morphed at (%d,%d)",unit->getType().getName().c_str(),unit,unit->getPosition().x(),unit->getPosition().y());
 		if (unit->getPlayer()->getID() == Broodwar->self()->getID()) {
@@ -378,6 +394,8 @@ void BTHAIModule::onUnitMorph(BWAPI::Unit* unit)
 }
 
 void BTHAIModule::onUnitRenegade(BWAPI::Unit* unit) {
+	Logger::Log("onUnitRenegade(.):");
+	Logger::Log(unit->getType().getName());
 	/*if (!Broodwar->isReplay()) {
 		Broodwar->sendText("A %s [%x] is now owned by %s",unit->getType().getName().c_str(),unit,unit->getPlayer()->getName().c_str());
 	}*/

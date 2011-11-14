@@ -1,6 +1,7 @@
 #include "OverlordAgent.h"
 #include "PFManager.h"
 #include "AgentManager.h"
+#include "Logger.h"
 
 OverlordAgent::OverlordAgent(Unit* mUnit) {
 	unit = mUnit;
@@ -13,11 +14,11 @@ OverlordAgent::OverlordAgent(Unit* mUnit) {
 }
 
 void OverlordAgent::computeActions() {
-	int cFrame = Broodwar->getFrameCount();
+	/*int cFrame = Broodwar->getFrameCount();
 	if (cFrame - lastFrame < 20) {
 		return;
 	}
-	lastFrame = cFrame;
+	lastFrame = cFrame;*/
 
 	if (currentState != EXPLORE) {
 		bool defensive = false;
@@ -35,11 +36,31 @@ void OverlordAgent::computeActions() {
 		else if (goal.x() == TilePosition(unit->getPosition()).x() &&
 			goal.y() == TilePosition(unit->getPosition()).y())
 		{
-			Broodwar->printf("getting new choke point");
-			int chokepointNo = BuildPlanner::getInstance()->getChokepointNo();
-			BWTA::Chokepoint* choke = BaseAgent::getChokePoint(chokepointNo);
+
+			//* get next choke point
+			std::set<BWTA::Chokepoint*> chokepoints = home->getChokepoints();
+			double distance = 5;
+			double min_length=10000;
+			BWTA::Chokepoint* choke=NULL;
+			//iterate through all chokepoints and look for the one with the smallest gap (least width)
+			Logger::Log("Looking for choke point");
+			for (std::set<BWTA::Chokepoint*>::iterator c = chokepoints.begin(); c != chokepoints.end(); c++) {
+				Logger::Log("checking poinnnttt");
+				double length = (*c)->getWidth();
+				if (distance < length && (length < min_length || choke == NULL)) {
+					Logger::Log("Found closer choke point");
+					min_length = length;
+					choke = *c;
+				}
+			}
+
+			Logger::Log("getting new choke point");
+			//int chokepointNo = getClosestChokePoint(5);
+			//int chokepointNo = BuildPlanner::getInstance()->getChokepointNo();
+			//BWTA::Chokepoint* choke = BaseAgent::getChokePoint(chokepointNo);
+			//BWTA::Chokepoint* choke = getClosestChokePoint(20);
 			if (choke != NULL) {
-				Broodwar->printf("... got one!");
+				Logger::Log("... got one!");
 				goal = TilePosition(choke->getCenter());
 				unit->rightClick(Position(goal));
 			}

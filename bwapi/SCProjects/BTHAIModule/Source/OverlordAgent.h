@@ -15,6 +15,7 @@ private:
 	Unit* findTarget();
 
 public:
+
 	OverlordAgent(Unit* mUnit);
 
 	/** Called each update to issue orders. */
