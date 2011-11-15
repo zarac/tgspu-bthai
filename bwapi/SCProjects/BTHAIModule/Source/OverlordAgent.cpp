@@ -47,7 +47,7 @@ void OverlordAgent::computeActions() {
 			//iterate through all chokepoints and look for the one with the smallest gap (least width)
 			Logger::Log("Looking for choke point");
 			for (std::set<BWTA::Chokepoint*>::iterator c = chokepoints.begin(); c != chokepoints.end(); c++) {
-				Logger::Log("checking poinnnttt");
+				//Logger::Log("checking poinnnttt");
 				double length = (*c)->getWidth();
 				if (distance < length && (length < min_length || choke == NULL)) {
 					Logger::Log("Found closer choke point");

@@ -8,6 +8,7 @@
 #include "Commander.h"
 #include "ZergCommander.h"
 #include "Logger.h"
+#include <BWTA.h>
 using namespace BWAPI;
 
 bool analyzed;
@@ -264,6 +265,17 @@ void BTHAIModule::onSendText(std::string text) {
 				}
 			}
 			
+		}
+	}
+	else if (text=="cp")
+	{
+		Logger::Log("Listing chokepoints:");
+		std::set<BWTA::Chokepoint*> chokepoints = BWTA::getChokepoints();
+		for (std::set<BWTA::Chokepoint*>::iterator cp = chokepoints.begin(); cp != chokepoints.end(); cp++)
+		{
+			double length = (*cp)->getWidth();
+			Logger::Log("choke point: .. ");
+			Broodwar->printf("choke point length : %d", length);
 		}
 	}
 	else {

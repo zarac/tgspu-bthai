@@ -2,6 +2,8 @@
 #include "AgentManager.h"
 #include "ExplorationManager.h"
 #include "Logger.h"
+#include <BWAPI.h>
+#include <BWTA.h>
 //#include "afx.h"
 
 ZergCommander::ZergCommander() {
@@ -76,6 +78,15 @@ void ZergCommander::computeActions() {
 	//	agent++;
 	//}
 
+	BWTA::BaseLocation *base = BWTA::getStartLocation(BWAPI::Broodwar->self());
+	std::set<BWAPI::Unit*>::const_iterator geyser = base->getGeysers().begin();
+	while (geyser != base->getGeysers().end())
+	{
+		// TODO : why does it it not resolved???
+		Logger::Log("gotz teh geyyyser");
+		Logger::Log((*geyser)->getType().getName());
+		geyser++;
+	}
 	updateWorkersNeeded();
 	manageLevel();
 
