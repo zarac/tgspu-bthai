@@ -50,6 +50,7 @@ ZergCommander::~ZergCommander() {
 	delete instance;
 }
 
+
 void ZergCommander::computeActions() {
 	//map<string, int> agents;
 	//cstring blah;
@@ -64,26 +65,48 @@ void ZergCommander::computeActions() {
 	vector<BaseAgent*> agents = agentManager->getAgents();
 	vector<BaseAgent*>::iterator agent = agents.begin();
 	vector<BaseAgent*>::iterator agentsend = agents.end();
-	//while (agent != agentsend)
-	//{
-	//	if ((*agent)->getTypeName() == "HatcheryAgent")
-	//		Logger::Log("agent type = " + (*agent)->getUnit()->getType());
-	//	agent++;
-	//}
+	Logger::Log("BEFORE");
+	int agentcount = 0;
+	while (agent != agentsend)
+	{
+		agentcount++;
+		Logger::Log("OH YEAH!");
+		if ((*agent)->getTypeName() == "HatcheryAgent")
+			Logger::Log("agent type = " + (*agent)->getUnit()->getType().getName());
+		agent++;
+	}
 	//// Why doesn't this work? (crash)
 	//for (vector<BaseAgent*>::iterator agent = agentManager->getAgents().begin(); agent != agentManager->getAgents().end(); agent++)
 	//{
-	//	if ((*agent)->getTypeName() == "HatcheryAgent")
-	//		Logger::Log(",,,agent type = " + (*agent)->getUnit()->getType());
-	//	agent++;
+	//	//if ((*agent)->getTypeName() == "HatcheryAgent")
+	//		//Broodwar->printf(",,,agent type = %s",(*agent)->getUnit()->getType().getName().c_str());
+	//	//agent++;
 	//}
+
+	//for (int i = 0; i < (int)agents.size(); i++) {
+	//	if (agents.at(i)->getUnitID() == unitID) {
+	//		agent = agents.at(i);
+	//		break;
+	//	}
+	//}
+
+	/*while (agent != agentManager->getAgents().end())
+	{
+		if ((*agent)->getTypeName() == "HatcheryAgent")
+			Broodwar->printf(",,,agent type = %s",(*agent)->getUnit()->getType().getName().c_str());
+		agent++;
+	}*/
+	Logger::Log("AFTER");
 
 	BWTA::BaseLocation *base = BWTA::getStartLocation(BWAPI::Broodwar->self());
 	std::set<BWAPI::Unit*>::const_iterator geyser = base->getGeysers().begin();
+	int gaysercount = 0;
 	while (geyser != base->getGeysers().end())
 	{
+		gaysercount++;
 		// TODO : why does it it not resolved???
-		Logger::Log("gotz teh geyyyser");
+
+		Logger::Log("gotz teh geyyyser.. " + gaysercount);
 		Logger::Log((*geyser)->getType().getName());
 		geyser++;
 	}

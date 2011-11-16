@@ -52,12 +52,12 @@ void Logger::log(char str[])
 	out << str << endl;
 }
 
-void Logger::Log(string str)
+void Logger::Logstr(string str)
 {
-	getInstance()->log(str);
+	getInstance()->logstr(str);
 }
 
-void Logger::log(string str)
+void Logger::logstr(string str)
 {
 	out << str << endl;
 }

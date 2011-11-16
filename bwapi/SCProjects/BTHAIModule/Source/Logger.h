@@ -18,9 +18,9 @@ public:
 	~Logger();
 	static Logger* getInstance();
 	static void Log(char[]);
-	static void Log(string);
+	static void Logstr(string);
 	void log(char[]);
-	void log(string);
+	void logstr(string);
 };
 
 #endif
